@@ -595,7 +595,6 @@ button {
 
 .why-image.loaded {
     opacity: 1;
-}
     filter: brightness(0.95) saturate(1.1);
     display: block;
 }
@@ -1224,7 +1223,6 @@ body.urgency-visible {
 
 .event-image.loaded {
     opacity: 1;
-}
     filter: brightness(0.85) contrast(1.1);
     will-change: transform;
     display: block;
