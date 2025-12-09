@@ -258,8 +258,10 @@ eventForm.addEventListener('submit', async (e) => {
     
     // Disable submit button
     submitBtn.disabled = true;
-    submitBtn.querySelector('.btn-text').style.display = 'none';
-    submitBtn.querySelector('.btn-loader').style.display = 'inline-block';
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoader = submitBtn.querySelector('.btn-loader');
+    if (btnText) btnText.style.display = 'none';
+    if (btnLoader) btnLoader.style.display = 'inline-block';
     
     // Collect form data
     const formData = {
@@ -276,13 +278,15 @@ eventForm.addEventListener('submit', async (e) => {
     try {
         // Verify EmailJS is loaded
         if (typeof emailjs === 'undefined') {
-            throw new Error('EmailJS no está cargado. Por favor, recarga la página.');
+            throw new Error('EmailJS no se cargó. Por favor, recarga la página y verifica tu conexión a internet.');
         }
         
         // Verify EmailJS is initialized
         if (!emailjs || typeof emailjs.send !== 'function') {
-            throw new Error('EmailJS no está inicializado correctamente.');
+            throw new Error('EmailJS no está inicializado correctamente. Por favor, recarga la página.');
         }
+        
+        console.log('✅ EmailJS verificado y listo para enviar');
         
         // Prepare email template parameters (must match EmailJS template variables)
         const templateParams = {
@@ -296,20 +300,27 @@ eventForm.addEventListener('submit', async (e) => {
             to_email: 'ebanopereiramiradorrestaurante@gmail.com'
         };
         
-        console.log('Enviando formulario con EmailJS...', {
+        console.log('📧 Enviando formulario con EmailJS...', {
             service: 'service_ldilgbs',
             template: 'template_gp3o3tk',
             params: templateParams
         });
         
-        // Send email using EmailJS
-        const response = await emailjs.send(
+        // Send email using EmailJS with timeout
+        const sendPromise = emailjs.send(
             'service_ldilgbs',      // Service ID
             'template_gp3o3tk',     // Template ID
             templateParams
         );
         
-        console.log('EmailJS respuesta:', response);
+        // Add timeout (30 seconds)
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Tiempo de espera agotado. El servidor no respondió en 30 segundos.')), 30000);
+        });
+        
+        const response = await Promise.race([sendPromise, timeoutPromise]);
+        
+        console.log('✅ EmailJS respuesta exitosa:', response);
         
         // Success
         closeFormModal();
@@ -327,8 +338,10 @@ eventForm.addEventListener('submit', async (e) => {
         
         // Re-enable submit button FIRST
         submitBtn.disabled = false;
-        submitBtn.querySelector('.btn-text').style.display = 'inline';
-        submitBtn.querySelector('.btn-loader').style.display = 'none';
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoader = submitBtn.querySelector('.btn-loader');
+        if (btnText) btnText.style.display = 'inline';
+        if (btnLoader) btnLoader.style.display = 'none';
         
         // Show user-friendly error message
         let errorMessage = 'Hubo un error al enviar tu solicitud. ';
