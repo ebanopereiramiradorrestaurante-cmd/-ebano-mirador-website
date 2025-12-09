@@ -233,6 +233,14 @@ function validateField(input) {
 eventForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    console.log('Formulario enviado - Iniciando validación...');
+    
+    // Remove any existing error messages
+    const existingError = eventForm.querySelector('.form-error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+    
     // Validate all fields
     let isValid = true;
     formInputs.forEach(input => {
@@ -242,8 +250,11 @@ eventForm.addEventListener('submit', async (e) => {
     });
     
     if (!isValid) {
+        console.log('Validación fallida - Campos incompletos');
         return;
     }
+    
+    console.log('Validación exitosa - Preparando envío...');
     
     // Disable submit button
     submitBtn.disabled = true;
@@ -314,6 +325,11 @@ eventForm.addEventListener('submit', async (e) => {
             status: error.status
         });
         
+        // Re-enable submit button FIRST
+        submitBtn.disabled = false;
+        submitBtn.querySelector('.btn-text').style.display = 'inline';
+        submitBtn.querySelector('.btn-loader').style.display = 'none';
+        
         // Show user-friendly error message
         let errorMessage = 'Hubo un error al enviar tu solicitud. ';
         
@@ -325,12 +341,28 @@ eventForm.addEventListener('submit', async (e) => {
         
         errorMessage += 'Por favor, intenta nuevamente o contáctanos directamente por WhatsApp al 310 482 7580.';
         
-        alert(errorMessage);
-    } finally {
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.querySelector('.btn-text').style.display = 'inline';
-        submitBtn.querySelector('.btn-loader').style.display = 'none';
+        // Show error in modal instead of alert
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'form-error-message';
+        errorDiv.style.cssText = 'background: #fee; border: 1px solid #fcc; color: #c33; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center;';
+        errorDiv.textContent = errorMessage;
+        
+        const form = document.getElementById('eventForm');
+        const existingError = form.querySelector('.form-error-message');
+        if (existingError) {
+            existingError.remove();
+        }
+        form.insertBefore(errorDiv, form.firstChild);
+        
+        // Scroll to error
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Remove error after 10 seconds
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
+        }, 10000);
     }
 });
 
