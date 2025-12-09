@@ -166,37 +166,21 @@ function validatePhone(phone) {
 }
 
 function showError(input, message) {
-    if (!input) return;
-    
     const formGroup = input.closest('.form-group');
-    if (!formGroup) return;
-    
     const errorMessage = formGroup.querySelector('.error-message');
-    if (errorMessage) {
-        errorMessage.textContent = message;
-        errorMessage.classList.add('show');
-    }
     
-    if (input.classList) {
-        input.classList.add('error');
-    }
+    input.classList.add('error');
+    errorMessage.textContent = message;
+    errorMessage.classList.add('show');
 }
 
 function clearError(input) {
-    if (!input) return;
-    
     const formGroup = input.closest('.form-group');
-    if (!formGroup) return;
-    
     const errorMessage = formGroup.querySelector('.error-message');
-    if (errorMessage) {
-        errorMessage.classList.remove('show');
-        errorMessage.textContent = '';
-    }
     
-    if (input.classList) {
-        input.classList.remove('error');
-    }
+    input.classList.remove('error');
+    errorMessage.classList.remove('show');
+    errorMessage.textContent = '';
 }
 
 function clearErrors() {
@@ -249,14 +233,6 @@ function validateField(input) {
 eventForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    console.log('Formulario enviado - Iniciando validación...');
-    
-    // Remove any existing error messages
-    const existingError = eventForm.querySelector('.form-error-message');
-    if (existingError) {
-        existingError.remove();
-    }
-    
     // Validate all fields
     let isValid = true;
     formInputs.forEach(input => {
@@ -266,69 +242,33 @@ eventForm.addEventListener('submit', async (e) => {
     });
     
     if (!isValid) {
-        console.log('Validación fallida - Campos incompletos');
         return;
     }
     
-    console.log('Validación exitosa - Preparando envío...');
-    
     // Disable submit button
     submitBtn.disabled = true;
-    const btnText = submitBtn.querySelector('.btn-text');
-    const btnLoader = submitBtn.querySelector('.btn-loader');
-    if (btnText) btnText.style.display = 'none';
-    if (btnLoader) btnLoader.style.display = 'inline-block';
+    submitBtn.querySelector('.btn-text').style.display = 'none';
+    submitBtn.querySelector('.btn-loader').style.display = 'inline-block';
     
     // Collect form data
     const formData = {
-        nombre: document.getElementById('nombre').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        telefono: document.getElementById('telefono').value.trim(),
+        nombre: document.getElementById('nombre').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
         tipoEvento: document.getElementById('tipoEvento').value,
         personas: document.getElementById('personas').value,
         fecha: document.getElementById('fecha').value,
-        notas: document.getElementById('notas').value.trim() || 'Sin notas adicionales',
+        notas: document.getElementById('notas').value,
         timestamp: new Date().toISOString()
     };
     
     try {
-        console.log('🔍 Verificando EmailJS...');
-        console.log('  - typeof emailjs:', typeof emailjs);
-        console.log('  - window.emailjsReady:', window.emailjsReady);
-        
-        // Wait for EmailJS to be ready (with timeout)
-        let attempts = 0;
-        const maxAttempts = 50; // 5 seconds max wait
-        
-        while ((typeof emailjs === 'undefined' || !window.emailjsReady) && attempts < maxAttempts) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-            attempts++;
-            if (attempts % 10 === 0) {
-                console.log(`⏳ Esperando EmailJS... (${attempts}/${maxAttempts})`);
-            }
-        }
-        
-        // Verify EmailJS is loaded
+        // Initialize EmailJS (will be initialized on page load)
         if (typeof emailjs === 'undefined') {
-            console.error('❌ EmailJS no está definido');
-            throw new Error('EmailJS no se cargó. Por favor, recarga la página y verifica tu conexión a internet.');
+            throw new Error('EmailJS no está cargado');
         }
         
-        // Verify EmailJS is initialized
-        if (!emailjs || typeof emailjs.send !== 'function') {
-            console.error('❌ EmailJS no tiene método send');
-            console.error('  - emailjs:', emailjs);
-            throw new Error('EmailJS no está inicializado correctamente. Por favor, recarga la página.');
-        }
-        
-        if (!window.emailjsReady) {
-            console.warn('⚠️ EmailJS no está marcado como ready, pero tiene método send. Continuando...');
-        }
-        
-        console.log('✅ EmailJS verificado y listo para enviar');
-        console.log('📋 Datos del formulario:', formData);
-        
-        // Prepare email template parameters (must match EmailJS template variables)
+        // Prepare email template parameters
         const templateParams = {
             from_name: formData.nombre,
             from_email: formData.email,
@@ -336,28 +276,16 @@ eventForm.addEventListener('submit', async (e) => {
             event_type: formData.tipoEvento,
             people: formData.personas,
             date: formData.fecha,
-            message: formData.notas,
+            message: formData.notas || 'Sin notas adicionales',
             to_email: 'ebanopereiramiradorrestaurante@gmail.com'
         };
         
-        console.log('📧 Enviando formulario con EmailJS...', {
-            service: 'service_ldilgbs',
-            template: 'template_gp3o3tk',
-            params: templateParams
-        });
-        
         // Send email using EmailJS
-        console.log('📤 Enviando email...');
-        
-        const response = await emailjs.send(
-            'service_ldilgbs',      // Service ID
-            'template_gp3o3tk',     // Template ID
+        await emailjs.send(
+            'service_ldilgbs',      // Service ID - Configurado
+            'template_gp3o3tk',     // Template ID - Configurado
             templateParams
         );
-        
-        console.log('✅ EmailJS respuesta exitosa:', response);
-        console.log('  - Status:', response.status);
-        console.log('  - Text:', response.text);
         
         // Success
         closeFormModal();
@@ -367,23 +295,24 @@ eventForm.addEventListener('submit', async (e) => {
         
     } catch (error) {
         console.error('Error completo:', error);
-        console.error('Detalles del error:', {
-            message: error.message,
+        console.error('Detalles:', {
+            status: error.status,
             text: error.text,
-            status: error.status
+            message: error.message
         });
         
-        // Re-enable submit button FIRST
+        // Re-enable submit button
         submitBtn.disabled = false;
-        const btnText = submitBtn.querySelector('.btn-text');
-        const btnLoader = submitBtn.querySelector('.btn-loader');
-        if (btnText) btnText.style.display = 'inline';
-        if (btnLoader) btnLoader.style.display = 'none';
+        submitBtn.querySelector('.btn-text').style.display = 'inline';
+        submitBtn.querySelector('.btn-loader').style.display = 'none';
         
         // Show user-friendly error message
         let errorMessage = 'Hubo un error al enviar tu solicitud. ';
         
-        if (error.text) {
+        if (error.text && error.text.includes('Invalid grant')) {
+            errorMessage = '⚠️ La conexión con Gmail expiró. Por favor, reconecta tu cuenta de Gmail en EmailJS. ';
+            errorMessage += 'Mientras tanto, puedes contactarnos directamente por WhatsApp al 310 482 7580.';
+        } else if (error.text) {
             errorMessage += `Error: ${error.text}. `;
         } else if (error.message) {
             errorMessage += `Error: ${error.message}. `;
@@ -394,7 +323,7 @@ eventForm.addEventListener('submit', async (e) => {
         // Show error in modal instead of alert
         const errorDiv = document.createElement('div');
         errorDiv.className = 'form-error-message';
-        errorDiv.style.cssText = 'background: #fee; border: 1px solid #fcc; color: #c33; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center;';
+        errorDiv.style.cssText = 'background: #fee; border: 2px solid #fcc; color: #c33; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 500;';
         errorDiv.textContent = errorMessage;
         
         const form = document.getElementById('eventForm');
@@ -407,12 +336,19 @@ eventForm.addEventListener('submit', async (e) => {
         // Scroll to error
         errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
-        // Remove error after 10 seconds
+        // Remove error after 15 seconds
         setTimeout(() => {
             if (errorDiv.parentNode) {
                 errorDiv.remove();
             }
-        }, 10000);
+        }, 15000);
+        
+        return;
+    } finally {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.querySelector('.btn-text').style.display = 'inline';
+        submitBtn.querySelector('.btn-loader').style.display = 'none';
     }
 });
 
@@ -498,33 +434,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // PERFORMANCE: Preload critical images
 // ============================================
 
-// ============================================
-// IMAGE LOADING HANDLER
-// ============================================
-
-function handleImageLoad(img) {
-    img.classList.add('loaded');
-}
-
-// Add loaded class when images finish loading
-document.querySelectorAll('img[loading="lazy"]').forEach(img => {
-    if (img.complete) {
-        handleImageLoad(img);
-    } else {
-        img.addEventListener('load', () => handleImageLoad(img));
-        img.addEventListener('error', () => {
-            // If image fails to load, show placeholder
-            img.style.opacity = '0.3';
-        });
-    }
-});
-
-// ============================================
-// PERFORMANCE: Preload critical images
-// ============================================
-
 const criticalImages = [
-    'images/hero-atardecer.png'
+    'images/hero-atardecer.jpg',
+    'images/why-section-vista.jpg',
+    'images/why-section-espacios.jpg',
+    'images/why-section-experiencia.jpg'
 ];
 
 criticalImages.forEach(src => {
