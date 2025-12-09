@@ -729,25 +729,37 @@
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
-        // Initialize EmailJS with Public Key - Wait for DOM and EmailJS to be ready
-        document.addEventListener('DOMContentLoaded', function() {
+        // Initialize EmailJS with Public Key
+        (function() {
+            window.emailjsReady = false;
+            
             function initEmailJS() {
                 if (typeof emailjs !== 'undefined') {
                     try {
                         emailjs.init("2HXw__rvQyUIqX4FF");
                         console.log('✅ EmailJS inicializado correctamente');
+                        console.log('🔑 Public Key:', "2HXw__rvQyUIqX4FF");
                         window.emailjsReady = true;
                     } catch (error) {
                         console.error('❌ Error al inicializar EmailJS:', error);
                         window.emailjsReady = false;
                     }
                 } else {
-                    console.warn('⏳ EmailJS aún no está cargado, reintentando...');
-                    setTimeout(initEmailJS, 100);
+                    // Retry after a short delay
+                    setTimeout(initEmailJS, 200);
                 }
             }
-            initEmailJS();
-        });
+            
+            // Try to initialize immediately
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initEmailJS);
+            } else {
+                initEmailJS();
+            }
+            
+            // Also try after a delay to ensure EmailJS script is loaded
+            setTimeout(initEmailJS, 500);
+        })();
     </script>
     <script src="script.js"></script>
 </body>

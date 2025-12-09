@@ -276,23 +276,37 @@ eventForm.addEventListener('submit', async (e) => {
     };
     
     try {
+        console.log('🔍 Verificando EmailJS...');
+        console.log('  - typeof emailjs:', typeof emailjs);
+        console.log('  - window.emailjsReady:', window.emailjsReady);
+        
         // Wait for EmailJS to be ready (with timeout)
         let attempts = 0;
-        const maxAttempts = 100; // 10 seconds max wait
+        const maxAttempts = 50; // 5 seconds max wait
         
         while ((typeof emailjs === 'undefined' || !window.emailjsReady) && attempts < maxAttempts) {
             await new Promise(resolve => setTimeout(resolve, 100));
             attempts++;
+            if (attempts % 10 === 0) {
+                console.log(`⏳ Esperando EmailJS... (${attempts}/${maxAttempts})`);
+            }
         }
         
         // Verify EmailJS is loaded
         if (typeof emailjs === 'undefined') {
+            console.error('❌ EmailJS no está definido');
             throw new Error('EmailJS no se cargó. Por favor, recarga la página y verifica tu conexión a internet.');
         }
         
         // Verify EmailJS is initialized
         if (!emailjs || typeof emailjs.send !== 'function') {
+            console.error('❌ EmailJS no tiene método send');
+            console.error('  - emailjs:', emailjs);
             throw new Error('EmailJS no está inicializado correctamente. Por favor, recarga la página.');
+        }
+        
+        if (!window.emailjsReady) {
+            console.warn('⚠️ EmailJS no está marcado como ready, pero tiene método send. Continuando...');
         }
         
         console.log('✅ EmailJS verificado y listo para enviar');
@@ -316,21 +330,18 @@ eventForm.addEventListener('submit', async (e) => {
             params: templateParams
         });
         
-        // Send email using EmailJS with timeout
-        const sendPromise = emailjs.send(
+        // Send email using EmailJS
+        console.log('📤 Enviando email...');
+        
+        const response = await emailjs.send(
             'service_ldilgbs',      // Service ID
             'template_gp3o3tk',     // Template ID
             templateParams
         );
         
-        // Add timeout (30 seconds)
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('Tiempo de espera agotado. El servidor no respondió en 30 segundos.')), 30000);
-        });
-        
-        const response = await Promise.race([sendPromise, timeoutPromise]);
-        
         console.log('✅ EmailJS respuesta exitosa:', response);
+        console.log('  - Status:', response.status);
+        console.log('  - Text:', response.text);
         
         // Success
         closeFormModal();
