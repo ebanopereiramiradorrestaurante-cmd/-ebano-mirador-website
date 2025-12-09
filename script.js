@@ -166,21 +166,37 @@ function validatePhone(phone) {
 }
 
 function showError(input, message) {
-    const formGroup = input.closest('.form-group');
-    const errorMessage = formGroup.querySelector('.error-message');
+    if (!input) return;
     
-    input.classList.add('error');
-    errorMessage.textContent = message;
-    errorMessage.classList.add('show');
+    const formGroup = input.closest('.form-group');
+    if (!formGroup) return;
+    
+    const errorMessage = formGroup.querySelector('.error-message');
+    if (errorMessage) {
+        errorMessage.textContent = message;
+        errorMessage.classList.add('show');
+    }
+    
+    if (input.classList) {
+        input.classList.add('error');
+    }
 }
 
 function clearError(input) {
-    const formGroup = input.closest('.form-group');
-    const errorMessage = formGroup.querySelector('.error-message');
+    if (!input) return;
     
-    input.classList.remove('error');
-    errorMessage.classList.remove('show');
-    errorMessage.textContent = '';
+    const formGroup = input.closest('.form-group');
+    if (!formGroup) return;
+    
+    const errorMessage = formGroup.querySelector('.error-message');
+    if (errorMessage) {
+        errorMessage.classList.remove('show');
+        errorMessage.textContent = '';
+    }
+    
+    if (input.classList) {
+        input.classList.remove('error');
+    }
 }
 
 function clearErrors() {
