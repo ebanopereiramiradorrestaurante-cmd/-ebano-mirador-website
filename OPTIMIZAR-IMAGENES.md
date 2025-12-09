@@ -77,3 +77,4 @@ chmod +x optimizar-imagenes.sh
 
 **⚠️ IMPORTANTE:** Optimiza las imágenes ANTES de subir los cambios. El sitio será mucho más rápido.
 
+

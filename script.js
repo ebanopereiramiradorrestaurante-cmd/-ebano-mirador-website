@@ -252,23 +252,28 @@ eventForm.addEventListener('submit', async (e) => {
     
     // Collect form data
     const formData = {
-        nombre: document.getElementById('nombre').value,
-        email: document.getElementById('email').value,
-        telefono: document.getElementById('telefono').value,
+        nombre: document.getElementById('nombre').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        telefono: document.getElementById('telefono').value.trim(),
         tipoEvento: document.getElementById('tipoEvento').value,
         personas: document.getElementById('personas').value,
         fecha: document.getElementById('fecha').value,
-        notas: document.getElementById('notas').value,
+        notas: document.getElementById('notas').value.trim() || 'Sin notas adicionales',
         timestamp: new Date().toISOString()
     };
     
     try {
-        // Initialize EmailJS (will be initialized on page load)
+        // Verify EmailJS is loaded
         if (typeof emailjs === 'undefined') {
-            throw new Error('EmailJS no está cargado');
+            throw new Error('EmailJS no está cargado. Por favor, recarga la página.');
         }
         
-        // Prepare email template parameters
+        // Verify EmailJS is initialized
+        if (!emailjs || typeof emailjs.send !== 'function') {
+            throw new Error('EmailJS no está inicializado correctamente.');
+        }
+        
+        // Prepare email template parameters (must match EmailJS template variables)
         const templateParams = {
             from_name: formData.nombre,
             from_email: formData.email,
@@ -276,16 +281,24 @@ eventForm.addEventListener('submit', async (e) => {
             event_type: formData.tipoEvento,
             people: formData.personas,
             date: formData.fecha,
-            message: formData.notas || 'Sin notas adicionales',
+            message: formData.notas,
             to_email: 'ebanopereiramiradorrestaurante@gmail.com'
         };
         
+        console.log('Enviando formulario con EmailJS...', {
+            service: 'service_ldilgbs',
+            template: 'template_gp3o3tk',
+            params: templateParams
+        });
+        
         // Send email using EmailJS
-        await emailjs.send(
-            'service_ldilgbs',      // Service ID - Configurado
-            'template_gp3o3tk',     // Template ID - Configurado
+        const response = await emailjs.send(
+            'service_ldilgbs',      // Service ID
+            'template_gp3o3tk',     // Template ID
             templateParams
         );
+        
+        console.log('EmailJS respuesta:', response);
         
         // Success
         closeFormModal();
@@ -294,8 +307,25 @@ eventForm.addEventListener('submit', async (e) => {
         }, 300);
         
     } catch (error) {
-        console.error('Error:', error);
-        alert('Hubo un error al enviar tu solicitud. Por favor, intenta nuevamente o contáctanos por WhatsApp al 310 482 7580.');
+        console.error('Error completo:', error);
+        console.error('Detalles del error:', {
+            message: error.message,
+            text: error.text,
+            status: error.status
+        });
+        
+        // Show user-friendly error message
+        let errorMessage = 'Hubo un error al enviar tu solicitud. ';
+        
+        if (error.text) {
+            errorMessage += `Error: ${error.text}. `;
+        } else if (error.message) {
+            errorMessage += `Error: ${error.message}. `;
+        }
+        
+        errorMessage += 'Por favor, intenta nuevamente o contáctanos directamente por WhatsApp al 310 482 7580.';
+        
+        alert(errorMessage);
     } finally {
         // Re-enable submit button
         submitBtn.disabled = false;

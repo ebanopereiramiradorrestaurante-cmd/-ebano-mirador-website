@@ -70,3 +70,4 @@ echo "📊 Verificando tamaños..."
 
 find images -type f \( -name "*.png" -o -name "*.jpg" -o -name "*.JPG" \) -exec ls -lh {} \; | awk '{print $5, $9}'
 
+
