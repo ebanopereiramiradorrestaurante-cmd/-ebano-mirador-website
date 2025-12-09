@@ -386,11 +386,33 @@ document.addEventListener('DOMContentLoaded', () => {
 // PERFORMANCE: Preload critical images
 // ============================================
 
+// ============================================
+// IMAGE LOADING HANDLER
+// ============================================
+
+function handleImageLoad(img) {
+    img.classList.add('loaded');
+}
+
+// Add loaded class when images finish loading
+document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+    if (img.complete) {
+        handleImageLoad(img);
+    } else {
+        img.addEventListener('load', () => handleImageLoad(img));
+        img.addEventListener('error', () => {
+            // If image fails to load, show placeholder
+            img.style.opacity = '0.3';
+        });
+    }
+});
+
+// ============================================
+// PERFORMANCE: Preload critical images
+// ============================================
+
 const criticalImages = [
-    'images/hero-atardecer.jpg',
-    'images/why-section-vista.jpg',
-    'images/why-section-espacios.jpg',
-    'images/why-section-experiencia.jpg'
+    'images/hero-atardecer.png'
 ];
 
 criticalImages.forEach(src => {
