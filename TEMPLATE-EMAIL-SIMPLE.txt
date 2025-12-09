@@ -1,0 +1,36 @@
+Nueva Solicitud de Evento - Ébano Mirador
+
+Has recibido una nueva solicitud de evento desde el formulario de contacto.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 INFORMACIÓN DEL CLIENTE
+
+Nombre: {{from_name}}
+Email: {{from_email}}
+Teléfono: {{phone}}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎉 DETALLES DEL EVENTO
+
+Tipo de Evento: {{event_type}}
+Número de Personas: {{people}}
+Fecha Tentativa: {{date}}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 NOTAS ADICIONALES
+
+{{message}}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Este email fue enviado automáticamente desde el formulario de contacto de Ébano Mirador.
+
+Para responder, simplemente responde a este email o contacta al cliente:
+- Email: {{from_email}}
+- WhatsApp: {{phone}}
+
+© 2025 Ébano Mirador. Todos los derechos reservados.
+

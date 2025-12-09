@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ébano Mirador - Restaurante y venue de eventos a 1.500m de altura en Pereira, Colombia. El mejor escenario para tus momentos especiales.">
+    <meta name="keywords" content="restaurante Pereira, eventos Pereira, bodas, cumpleaños, venue eventos, mirador Pereira">
+    <meta name="author" content="Ébano Mirador">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ebano-mirador.com/">
+    
+    <!-- Google Analytics (Descomentar y agregar tu ID) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script> -->
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ébano Mirador - Donde Suceden Tus Historias Más Hermosas">
+    <meta property="og:description" content="A 1.500 metros de altura, con la vista más espectacular de Pereira">
+    <meta property="og:image" content="images/hero-atardecer.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Ébano Mirador - Donde Suceden Tus Historias Más Hermosas">
+    <meta property="twitter:description" content="A 1.500 metros de altura, con la vista más espectacular de Pereira">
+    
+    <title>Ébano Mirador - Donde Suceden Tus Historias Más Hermosas</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Georgia:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#D4AF37">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Ébano Mirador",
+      "description": "Restaurante y venue de eventos a 1.500m de altura en Pereira, Colombia",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Pereira",
+        "addressCountry": "CO"
+      },
+      "telephone": "+573104827580",
+      "servesCuisine": "Colombiana",
+      "priceRange": "$$$",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "118"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="#inicio" class="logo">
+                    <span class="logo-text">ÉBANO</span>
+                    <span class="logo-subtitle">MIRADOR</span>
+                </a>
+                
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                    <li><a href="#eventos" class="nav-link">Eventos</a></li>
+                    <li><a href="#testimonios" class="nav-link">Testimonios</a></li>
+                    <li><a href="#contacto" class="nav-link">Contacto</a></li>
+                    <li><button class="btn-cta-nav" id="openFormBtn">Planifica tu evento</button></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Urgency Banner -->
+        <div class="urgency-banner" id="urgencyBanner">
+            <div class="urgency-content">
+                <span class="urgency-icon">🔥</span>
+                <span class="urgency-text">Solo quedan <strong>3 fechas disponibles</strong> este mes. ¡Reserva ahora!</span>
+                <button class="urgency-close" id="urgencyClose" aria-label="Cerrar">&times;</button>
+            </div>
+        </div>
+        
+        <!-- Social Links Mobile -->
+        <div class="social-mobile">
+            <a href="https://wa.me/573104827580?text=Hola%20Ébano%2C%20quiero%20información%20sobre%20mi%20evento" target="_blank" rel="noopener" aria-label="WhatsApp">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
+            </a>
+            <a href="https://instagram.com/miradorebanopereira" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-background">
+            <img src="images/hero-atardecer.jpg" alt="Vista espectacular del atardecer desde Ébano Mirador" class="hero-image" loading="eager" onerror="this.src='images/hero-atardecer.png'">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Donde Suceden Tus Historias Más Hermosas</h1>
+            <p class="hero-subtitle">A 1.500 metros de altura, con la vista más espectacular de Pereira</p>
+            <button class="btn-primary" id="heroCtaBtn">Planifica Tu Evento</button>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Why Section -->
+    <section class="why-section" id="porque">
+        <div class="container">
+            <h2 class="section-title">Por Qué Ébano</h2>
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="why-image-wrapper">
+                        <img src="images/why-section-vista.jpg" alt="Vista panorámica de Pereira desde Ébano Mirador" class="why-image" loading="lazy" onerror="this.src='images/why-section-vista.png'">
+                    </div>
+                    <div class="why-icon">👁️</div>
+                    <h3 class="why-title">La Mejor Vista de Pereira</h3>
+                    <p class="why-text">A 1.500m de altura, 360° de vistas incomparables</p>
+                </div>
+                
+                <div class="why-card">
+                    <div class="why-image-wrapper">
+                        <img src="images/why-section-espacios.jpg" alt="Iglú verde con luces en Ébano Mirador" class="why-image" loading="lazy" onerror="this.src='images/why-section-espacios.png'">
+                    </div>
+                    <div class="why-icon">🏠</div>
+                    <h3 class="why-title">Espacios Privados & Premium</h3>
+                    <p class="why-text">Iglús, terraza, salones. Tu evento, tu espacio</p>
+                </div>
+                
+                <div class="why-card">
+                    <div class="why-image-wrapper">
+                        <img src="images/why-section-experiencia.jpg" alt="Gente celebrando en Ébano Mirador" class="why-image" loading="lazy" onerror="this.src='images/why-section-experiencia.png'">
+                    </div>
+                    <div class="why-icon">⭐</div>
+                    <h3 class="why-title">Experiencia Personalizada</h3>
+                    <p class="why-text">Equipo dedicado a hacer tu momento inolvidable</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" data-target="500">0</div>
+                    <div class="stat-label">+ Eventos Realizados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="98">0</div>
+                    <div class="stat-label">% Satisfacción</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="1500">0</div>
+                    <div class="stat-label">m de Altura</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="360">0</div>
+                    <div class="stat-label">° Vista Panorámica</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Food Carousel Section -->
+    <section class="food-section">
+        <div class="container">
+            <h2 class="section-title">Nuestra Cocina</h2>
+            <p class="food-subtitle">Una muestra de nuestros platos más destacados</p>
+            <div class="food-carousel-wrapper">
+                <button class="carousel-btn carousel-prev" id="foodPrev" aria-label="Anterior">‹</button>
+                <div class="food-carousel" id="foodCarousel">
+                    <!-- Images will be loaded dynamically -->
+                </div>
+                <button class="carousel-btn carousel-next" id="foodNext" aria-label="Siguiente">›</button>
+            </div>
+            <p class="food-note">Menú completo disponible en el restaurante</p>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process-section">
+        <div class="container">
+            <h2 class="section-title">Cómo Funciona</h2>
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="process-icon">1</div>
+                    <h3 class="process-title">Consulta</h3>
+                    <p class="process-text">Llena el formulario con los detalles de tu evento</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="process-icon">2</div>
+                    <h3 class="process-title">Cotización</h3>
+                    <p class="process-text">Recibe una propuesta personalizada en menos de 24 horas</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="process-icon">3</div>
+                    <h3 class="process-title">Confirmación</h3>
+                    <p class="process-text">Reserva tu fecha y personaliza los detalles</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="process-icon">4</div>
+                    <h3 class="process-title">Celebración</h3>
+                    <p class="process-text">Disfruta tu evento inolvidable en Ébano Mirador</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events-section" id="eventos">
+        <div class="container">
+            <h2 class="section-title section-title-light">Nuestros Eventos</h2>
+            <div class="events-grid">
+                <div class="event-card" data-event="bodas">
+                    <div class="event-image-wrapper">
+                        <img src="images/events/events-bodas.jpg" alt="Boda en Ébano Mirador" class="event-image" loading="lazy" onerror="this.src='images/events/events-bodas.png'">
+                        <div class="event-overlay"></div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Bodas</h3>
+                        <p class="event-description">Tu día especial merece un mirador a la altura de tu amor</p>
+                        <button class="btn-event" data-event-type="Bodas">Personalizar</button>
+                    </div>
+                </div>
+                
+                <div class="event-card" data-event="despedidas">
+                    <div class="event-image-wrapper">
+                        <img src="images/events/events-despedidas.jpg" alt="Despedida de soltera en Ébano Mirador" class="event-image" loading="lazy" onerror="this.src='images/events/events-despedidas.png'">
+                        <div class="event-overlay"></div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Despedidas de Soltera/Soltero</h3>
+                        <p class="event-description">Celebra el inicio de una nueva etapa con estilo</p>
+                        <button class="btn-event" data-event-type="Despedidas de Soltera/Soltero">Personalizar</button>
+                    </div>
+                </div>
+                
+                <div class="event-card" data-event="cumpleanos">
+                    <div class="event-image-wrapper">
+                        <img src="images/events/events-cumpleanos.jpg" alt="Cumpleaños en Ébano Mirador" class="event-image" loading="lazy" onerror="this.src='images/events/events-cumpleanos.png'">
+                        <div class="event-overlay"></div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Cumpleaños</h3>
+                        <p class="event-description">Haz de cada año una celebración inolvidable</p>
+                        <button class="btn-event" data-event-type="Cumpleaños">Personalizar</button>
+                    </div>
+                </div>
+                
+                <div class="event-card" data-event="baby-shower">
+                    <div class="event-image-wrapper">
+                        <img src="images/events/events-baby-shower.jpg" alt="Baby shower en Ébano Mirador" class="event-image" loading="lazy" onerror="this.src='images/events/events-baby-shower.png'">
+                        <div class="event-overlay"></div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Baby Showers</h3>
+                        <p class="event-description">Recibe a la nueva vida en un lugar especial</p>
+                        <button class="btn-event" data-event-type="Baby Showers">Personalizar</button>
+                    </div>
+                </div>
+                
+                <div class="event-card" data-event="corporativos">
+                    <div class="event-image-wrapper">
+                        <img src="images/events/events-corporativos.jpg" alt="Evento corporativo en Ébano Mirador" class="event-image" loading="lazy" onerror="this.src='images/events/events-corporativos.png'">
+                        <div class="event-overlay"></div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Eventos Corporativos</h3>
+                        <p class="event-description">Impresiona a tu equipo con un escenario único</p>
+                        <button class="btn-event" data-event-type="Eventos Corporativos">Personalizar</button>
+                    </div>
+                </div>
+                
+                <div class="event-card" data-event="coworking">
+                    <div class="event-image-wrapper">
+                        <img src="images/events/events-coworking.jpg" alt="Coworking en Ébano Mirador" class="event-image" loading="lazy" onerror="this.src='images/events/events-coworking.png'">
+                        <div class="event-overlay"></div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Coworking & Reuniones</h3>
+                        <p class="event-description">Productividad con la mejor vista de la ciudad</p>
+                        <button class="btn-event" data-event-type="Coworking & Reuniones">Personalizar</button>
+                    </div>
+                </div>
+                
+                <div class="event-card" data-event="cenas">
+                    <div class="event-image-wrapper">
+                        <img src="images/events/events-cenas.jpg" alt="Cena romántica en Ébano Mirador" class="event-image" loading="lazy" onerror="this.src='images/events/events-cenas.png'">
+                        <div class="event-overlay"></div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Cenas Románticas</h3>
+                        <p class="event-description">Momentos íntimos bajo las estrellas</p>
+                        <button class="btn-event" data-event-type="Cenas Románticas">Personalizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">Preguntas Frecuentes</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Cuál es la capacidad máxima del lugar?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Nuestro espacio puede acomodar desde eventos íntimos de 20 personas hasta celebraciones grandes de hasta 200 invitados. Contamos con diferentes áreas que se adaptan al tamaño de tu evento.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Incluye decoración y montaje?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ofrecemos diferentes paquetes. El espacio básico incluye el lugar, pero podemos coordinar decoración, montaje y todos los detalles según tus necesidades. Todo se personaliza en la cotización.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Hay estacionamiento disponible?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sí, contamos con estacionamiento privado para tus invitados. El espacio varía según el tamaño del evento, pero siempre garantizamos estacionamiento suficiente.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Se puede personalizar el menú?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Absolutamente. Nuestro chef trabaja contigo para crear un menú personalizado según tus preferencias, restricciones dietéticas y presupuesto. Ofrecemos opciones desde cócteles hasta cenas completas.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Qué pasa si llueve el día del evento?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Contamos con espacios cubiertos y techados, incluyendo nuestros iglús y salones interiores. Tu evento puede continuar sin problemas, disfrutando de la vista desde espacios protegidos.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Cuánto tiempo antes debo reservar?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Recomendamos reservar con al menos 2-3 meses de anticipación, especialmente para fechas populares como fines de semana y temporadas altas. Sin embargo, siempre consulta disponibilidad, ya que a veces tenemos fechas disponibles con menos tiempo.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Permiten música en vivo o DJ?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sí, permitimos música en vivo y DJ. Tenemos sistema de sonido disponible y podemos coordinar la logística. Solo pedimos respetar los niveles de volumen según las regulaciones del lugar.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Ofrecen paquetes todo incluido?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sí, ofrecemos paquetes personalizados que pueden incluir espacio, comida, bebidas, decoración y servicios adicionales. Todo se adapta a tu presupuesto y necesidades específicas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram CTA Section -->
+    <section class="instagram-cta-section">
+        <div class="container">
+            <div class="instagram-cta-content">
+                <h2 class="instagram-cta-title">Descubre Nuestra Galería</h2>
+                <p class="instagram-cta-text">Mira todas nuestras fotos profesionales, eventos realizados y la magia que creamos en cada celebración</p>
+                <a href="https://instagram.com/miradorebanopereira" target="_blank" rel="noopener" class="btn-instagram">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    Ver en Instagram
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" id="testimonios">
+        <div class="container">
+            <div class="testimonials-layout">
+                <div class="testimonials-column">
+                    <h2 class="section-title section-title-light">Lo Que Dicen Nuestros Clientes</h2>
+                    <div class="testimonials-list">
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="testimonial-avatar">MG</div>
+                                <div class="testimonial-info">
+                                    <h4 class="testimonial-name">María García</h4>
+                                    <p class="testimonial-event">Boda 2024</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p class="testimonial-text">"El lugar perfecto para nuestra boda. La vista es impresionante y el servicio excepcional. Nuestros invitados quedaron encantados."</p>
+                        </div>
+                        
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="testimonial-avatar">CR</div>
+                                <div class="testimonial-info">
+                                    <h4 class="testimonial-name">Carlos Rodríguez</h4>
+                                    <p class="testimonial-event">Evento Corporativo</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p class="testimonial-text">"Excelente para eventos corporativos. El espacio es amplio, la comida deliciosa y la atención al detalle impecable."</p>
+                        </div>
+                        
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="testimonial-avatar">LS</div>
+                                <div class="testimonial-info">
+                                    <h4 class="testimonial-name">Laura Sánchez</h4>
+                                    <p class="testimonial-event">Cumpleaños</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p class="testimonial-text">"Celebré mi cumpleaños aquí y fue mágico. Los iglús son preciosos y la experiencia inolvidable. Totalmente recomendado."</p>
+                        </div>
+                        
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="testimonial-avatar">JP</div>
+                                <div class="testimonial-info">
+                                    <h4 class="testimonial-name">Juan Pérez</h4>
+                                    <p class="testimonial-event">Cena Romántica</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p class="testimonial-text">"La mejor cena romántica que hemos tenido. El ambiente, la vista y la comida superaron todas nuestras expectativas."</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reviews-column">
+                    <div class="google-reviews">
+                        <h3 class="reviews-title">Google Reviews</h3>
+                        <div class="reviews-rating">
+                            <div class="stars-large">★★★★★</div>
+                            <p class="reviews-score">4.8 de 5</p>
+                            <p class="reviews-count">118 reseñas</p>
+                        </div>
+                        <a href="https://maps.app.goo.gl/NPJMgBGEXc94kpES9" target="_blank" rel="noopener" class="btn-reviews">
+                            Ver todas en Google Maps
+                        </a>
+                        <div class="maps-embed">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.5!2d-75.6964!3d4.8133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNMKwNDgnNDcuOSJOIDc1wrA0MSc0Ny4wIlc!5e0!3m2!1ses!2sco!4v1234567890"
+                                width="100%" 
+                                height="300" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
+                                title="Ubicación de Ébano Mirador en Google Maps">
+                            </iframe>
+                            <a href="https://maps.app.goo.gl/NPJMgBGEXc94kpES9" target="_blank" rel="noopener" class="maps-link-direct">
+                                📍 Abrir en Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contacto">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <span class="logo-text">ÉBANO</span>
+                        <span class="logo-subtitle">MIRADOR</span>
+                    </div>
+                    <p class="footer-description">Mirador Restaurante Ébano. El mejor escenario para tus momentos.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4 class="footer-title">Links Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#eventos">Eventos</a></li>
+                        <li><a href="#testimonios">Testimonios</a></li>
+                        <li><button class="footer-link-btn" id="footerFormBtn">Formulario</button></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4 class="footer-title">Contacto</h4>
+                    <ul class="footer-contact">
+                        <li>
+                            <a href="https://wa.me/573104827580?text=Hola%20Ébano%2C%20quiero%20información%20sobre%20mi%20evento" target="_blank" rel="noopener">
+                                📞 WhatsApp: 310 482 7580
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:ebanopereiramiradorrestaurante@gmail.com">
+                                📧 Email: ebanopereiramiradorrestaurante@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://maps.app.goo.gl/NPJMgBGEXc94kpES9" target="_blank" rel="noopener">
+                                📍 Ver en Google Maps
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4 class="footer-title">Redes Sociales</h4>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/miradorebanopereira" target="_blank" rel="noopener" aria-label="Instagram">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            Instagram
+                        </a>
+                        <a href="https://maps.app.goo.gl/NPJMgBGEXc94kpES9" target="_blank" rel="noopener" aria-label="Google Maps">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2025 Ébano Mirador. Donde la vida se vuelve memorable.</p>
+                <p class="footer-partner">
+                    Desarrollado con 
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display: inline-block; vertical-align: middle; margin: 0 4px;">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    por 
+                    <a href="https://instagram.com/agenciagenio.ia" target="_blank" rel="noopener" class="partner-link">@agenciagenio.ia</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Form Modal -->
+    <div class="modal-overlay" id="formModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal" aria-label="Cerrar modal">&times;</button>
+            <h2 class="modal-title">Planifica Tu Evento</h2>
+            <p class="modal-subtitle">Completa el formulario y recibirás una propuesta personalizada en menos de 24 horas</p>
+            
+            <form id="eventForm" class="event-form">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo *</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                    <span class="error-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                    <span class="error-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefono">Teléfono (WhatsApp) *</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="+57 300 123 4567" required>
+                    <span class="error-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tipoEvento">Tipo de Evento *</label>
+                    <select id="tipoEvento" name="tipoEvento" required>
+                        <option value="">Selecciona un tipo</option>
+                        <option value="Bodas">Bodas</option>
+                        <option value="Despedidas de Soltera/Soltero">Despedidas de Soltera/Soltero</option>
+                        <option value="Cumpleaños">Cumpleaños</option>
+                        <option value="Baby Showers">Baby Showers</option>
+                        <option value="Eventos Corporativos">Eventos Corporativos</option>
+                        <option value="Coworking & Reuniones">Coworking & Reuniones</option>
+                        <option value="Cenas Románticas">Cenas Románticas</option>
+                    </select>
+                    <span class="error-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="personas">Número de Personas *</label>
+                    <select id="personas" name="personas" required>
+                        <option value="">Selecciona un rango</option>
+                        <option value="20-50">20-50 personas</option>
+                        <option value="51-100">51-100 personas</option>
+                        <option value="101-200">101-200 personas</option>
+                        <option value="200+">200+ personas</option>
+                    </select>
+                    <span class="error-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fecha">Fecha Tentativa *</label>
+                    <input type="month" id="fecha" name="fecha" required>
+                    <span class="error-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notas">Requisitos Especiales / Notas</label>
+                    <textarea id="notas" name="notas" rows="4" placeholder="Cuéntanos sobre tu evento..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span class="btn-text">Enviar Solicitud</span>
+                    <span class="btn-loader" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                                <animate attributeName="stroke-dasharray" dur="1.5s" values="0 31.416;15.708 15.708;0 31.416;0 31.416" repeatCount="indefinite"/>
+                                <animate attributeName="stroke-dashoffset" dur="1.5s" values="0;-15.708;-31.416;-31.416" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal" style="display: none;">
+        <div class="modal-content modal-success">
+            <div class="success-icon">✓</div>
+            <h2 class="modal-title">¡Gracias!</h2>
+            <p class="modal-subtitle">En menos de 24h recibirás una propuesta personalizada</p>
+            <div class="success-actions">
+                <a href="https://instagram.com/miradorebanopereira" target="_blank" rel="noopener" class="btn-success">
+                    Síguenos en Instagram
+                </a>
+                <a href="https://wa.me/573104827580?text=Hola%20Ébano%2C%20quiero%20información%20sobre%20mi%20evento" target="_blank" rel="noopener" class="btn-success btn-success-whatsapp">
+                    Escribir por WhatsApp
+                </a>
+            </div>
+            <button class="btn-close-success" id="closeSuccessModal">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/573104827580?text=Hola%20Ébano%2C%20quiero%20información%20sobre%20mi%20evento" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener" 
+       aria-label="Contactar por WhatsApp">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+        <span class="whatsapp-text">¿Tienes preguntas?</span>
+    </a>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with Public Key
+        (function(){
+            emailjs.init("2HXw__rvQyUIqX4FF");
+        })();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
+
