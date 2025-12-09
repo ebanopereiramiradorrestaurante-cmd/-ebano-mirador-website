@@ -276,6 +276,15 @@ eventForm.addEventListener('submit', async (e) => {
     };
     
     try {
+        // Wait for EmailJS to be ready (with timeout)
+        let attempts = 0;
+        const maxAttempts = 100; // 10 seconds max wait
+        
+        while ((typeof emailjs === 'undefined' || !window.emailjsReady) && attempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
+        }
+        
         // Verify EmailJS is loaded
         if (typeof emailjs === 'undefined') {
             throw new Error('EmailJS no se cargó. Por favor, recarga la página y verifica tu conexión a internet.');
@@ -287,6 +296,7 @@ eventForm.addEventListener('submit', async (e) => {
         }
         
         console.log('✅ EmailJS verificado y listo para enviar');
+        console.log('📋 Datos del formulario:', formData);
         
         // Prepare email template parameters (must match EmailJS template variables)
         const templateParams = {
