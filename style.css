@@ -149,7 +149,8 @@ button {
     top: 0;
     right: -100%;
     width: 280px;
-    height: 100vh;
+    height: 100vh; /* Fallback para navegadores antiguos */
+    height: 100dvh; /* Dynamic viewport height - mejor para móviles */
     background: var(--color-black);
     list-style: none;
     display: flex;
@@ -243,7 +244,8 @@ button {
 
 .hero {
     position: relative;
-    height: 100vh;
+    height: 100vh; /* Fallback para navegadores antiguos */
+    height: 100dvh; /* Dynamic viewport height - mejor para móviles */
     min-height: 600px;
     display: flex;
     align-items: center;
@@ -1399,7 +1401,8 @@ body.urgency-visible {
     padding: 30px;
     max-width: 600px;
     width: 100%;
-    max-height: 90vh;
+    max-height: 90vh; /* Fallback para navegadores antiguos */
+    max-height: 90dvh; /* Dynamic viewport height - mejor para móviles */
     overflow-y: auto;
     position: relative;
     border-top: 6px solid var(--color-gold-primary);
@@ -1705,7 +1708,8 @@ body.urgency-visible {
 
 .lightbox-image {
     max-width: 90%;
-    max-height: 90vh;
+    max-height: 90vh; /* Fallback para navegadores antiguos */
+    max-height: 90dvh; /* Dynamic viewport height - mejor para móviles */
     object-fit: contain;
     border-radius: 8px;
 }
