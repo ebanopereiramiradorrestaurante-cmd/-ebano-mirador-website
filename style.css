@@ -212,7 +212,7 @@ button {
 }
 
 .social-mobile {
-    display: flex;
+    display: none !important; /* Completamente oculto - WhatsApp removido */
     gap: 15px;
     position: fixed;
     bottom: 20px;
@@ -1600,14 +1600,7 @@ body.urgency-visible {
     transform: translateY(-2px);
 }
 
-.btn-success-whatsapp {
-    background: #25D366;
-    color: var(--color-white);
-}
-
-.btn-success-whatsapp:hover {
-    background: #20BA5A;
-}
+/* WhatsApp button styles removed - no longer needed */
 
 .btn-close-success {
     background: transparent;
@@ -1736,6 +1729,7 @@ body.urgency-visible {
     }
     
     .social-mobile {
+        display: none !important; /* Oculto también en móvil */
         display: none;
     }
     

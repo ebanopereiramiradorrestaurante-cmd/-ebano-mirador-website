@@ -1,747 +1,941 @@
 // ============================================
-// NAVBAR FUNCTIONALITY
+// MAIN INITIALIZATION - Todo el código dentro de DOMContentLoaded
+// VERSIÓN: 1765392250 - FORZAR RECARGA
 // ============================================
 
-const menuToggle = document.getElementById('menuToggle');
-const navMenu = document.getElementById('navMenu');
-const navLinks = document.querySelectorAll('.nav-link');
-
-// Toggle mobile menu
-if (menuToggle) {
-    menuToggle.addEventListener('click', () => {
-        menuToggle.classList.toggle('active');
-        navMenu.classList.toggle('active');
-        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
-    });
-}
-
-// Close menu when clicking nav links
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        menuToggle.classList.remove('active');
-        navMenu.classList.remove('active');
-        document.body.style.overflow = '';
-    });
-});
-
-// Navbar scroll effect
-let lastScroll = 0;
-const navbar = document.getElementById('navbar');
-
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
+(function() {
+    'use strict';
     
-    if (currentScroll > 100) {
-        navbar.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.3)';
+    // Limpiar cualquier caché de funciones anteriores
+    if (window.formInitialized) {
+        console.log('⚠️ Limpiando versión anterior...');
+        delete window.formInitialized;
+    }
+    
+    // Esperar a que el DOM esté completamente cargado
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
     } else {
-        navbar.style.boxShadow = 'none';
+        // DOM ya está cargado
+        init();
     }
     
-    lastScroll = currentScroll;
-});
-
-// ============================================
-// SMOOTH SCROLL
-// ============================================
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href === '#') return;
+    function init() {
+        console.log('🚀 Inicializando aplicación - VERSIÓN 1765392250');
+        console.log('🔄 Esta es una versión NUEVA - caché limpiado');
         
-        e.preventDefault();
-        const target = document.querySelector(href);
+        // Inicializar todas las funcionalidades
+        initNavbar();
+        initSmoothScroll();
+        initFormModal();
+        initFormValidation();
+        initScrollAnimations();
+        initHeroParallax();
+        initStats();
+        initFoodCarousel();
+        initFAQ();
+        initUrgencyBanner();
+        initDateField();
         
-        if (target) {
-            const offsetTop = target.offsetTop - 80;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
+        console.log('✅ Aplicación inicializada correctamente');
+    }
+    
+    // ============================================
+    // NAVBAR FUNCTIONALITY
+    // ============================================
+    
+    function initNavbar() {
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const navbar = document.getElementById('navbar');
+        
+        if (!menuToggle || !navMenu) return;
+        
+        // Toggle mobile menu
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        });
+        
+        // Close menu when clicking nav links
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.style.overflow = '';
             });
-        }
-    });
-});
-
-// ============================================
-// FORM MODAL FUNCTIONALITY
-// ============================================
-
-const formModal = document.getElementById('formModal');
-const successModal = document.getElementById('successModal');
-const openFormBtn = document.getElementById('openFormBtn');
-const heroCtaBtn = document.getElementById('heroCtaBtn');
-const footerFormBtn = document.getElementById('footerFormBtn');
-const closeModal = document.getElementById('closeModal');
-const closeSuccessModal = document.getElementById('closeSuccessModal');
-const eventForm = document.getElementById('eventForm');
-const submitBtn = document.getElementById('submitBtn');
-const tipoEventoSelect = document.getElementById('tipoEvento');
-
-// Open form modal
-function openFormModal(eventType = '') {
-    if (eventType) {
-        tipoEventoSelect.value = eventType;
-    }
-    formModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-// Close form modal
-function closeFormModal() {
-    formModal.classList.remove('active');
-    document.body.style.overflow = '';
-    eventForm.reset();
-    clearErrors();
-}
-
-// Open success modal
-function openSuccessModal() {
-    formModal.classList.remove('active');
-    successModal.style.display = 'flex';
-    successModal.classList.add('active');
-}
-
-// Close success modal
-function closeSuccessModalFunc() {
-    successModal.classList.remove('active');
-    setTimeout(() => {
-        successModal.style.display = 'none';
-    }, 300);
-    document.body.style.overflow = '';
-}
-
-// Event listeners
-if (openFormBtn) openFormBtn.addEventListener('click', () => openFormModal());
-if (heroCtaBtn) heroCtaBtn.addEventListener('click', () => openFormModal());
-if (footerFormBtn) footerFormBtn.addEventListener('click', () => openFormModal());
-if (closeModal) closeModal.addEventListener('click', closeFormModal);
-if (closeSuccessModal) closeSuccessModal.addEventListener('click', closeSuccessModalFunc);
-
-// Close modal on overlay click
-formModal.addEventListener('click', (e) => {
-    if (e.target === formModal) {
-        closeFormModal();
-    }
-});
-
-successModal.addEventListener('click', (e) => {
-    if (e.target === successModal) {
-        closeSuccessModalFunc();
-    }
-});
-
-// Close modal on Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        if (formModal.classList.contains('active')) {
-            closeFormModal();
-        }
-        if (successModal.classList.contains('active')) {
-            closeSuccessModalFunc();
-        }
-    }
-});
-
-// Event cards - open form with pre-selected event type
-document.querySelectorAll('.btn-event').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const eventType = btn.getAttribute('data-event-type');
-        openFormModal(eventType);
-    });
-});
-
-// ============================================
-// FORM VALIDATION
-// ============================================
-
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-}
-
-function validatePhone(phone) {
-    const re = /^[\d\s\+\-\(\)]+$/;
-    return re.test(phone) && phone.replace(/\D/g, '').length >= 10;
-}
-
-function showError(input, message) {
-    if (!input) return;
-    
-    const formGroup = input.closest('.form-group');
-    if (!formGroup) return;
-    
-    const errorMessage = formGroup.querySelector('.error-message');
-    if (errorMessage) {
-        errorMessage.textContent = message;
-        errorMessage.classList.add('show');
-    }
-    
-    if (input.classList) {
-        input.classList.add('error');
-    }
-}
-
-function clearError(input) {
-    if (!input) return;
-    
-    const formGroup = input.closest('.form-group');
-    if (!formGroup) return;
-    
-    const errorMessage = formGroup.querySelector('.error-message');
-    if (errorMessage) {
-        errorMessage.classList.remove('show');
-        errorMessage.textContent = '';
-    }
-    
-    if (input.classList) {
-        input.classList.remove('error');
-    }
-}
-
-function clearErrors() {
-    const errorInputs = document.querySelectorAll('.error');
-    if (errorInputs && errorInputs.length > 0) {
-        errorInputs.forEach(input => {
-            if (input && input.closest('.form-group')) {
-                clearError(input);
-            }
-        });
-    }
-}
-
-// Real-time validation
-const formInputs = eventForm.querySelectorAll('input, select, textarea');
-
-formInputs.forEach(input => {
-    input.addEventListener('blur', () => {
-        validateField(input);
-    });
-    
-    input.addEventListener('input', () => {
-        if (input.classList.contains('error')) {
-            validateField(input);
-        }
-    });
-});
-
-function validateField(input) {
-    if (!input) return true;
-    
-    const value = input.value ? input.value.trim() : '';
-    
-    if (input.hasAttribute('required') && !value) {
-        showError(input, 'Este campo es obligatorio');
-        return false;
-    }
-    
-    if (input.type === 'email' && value && !validateEmail(value)) {
-        showError(input, 'Ingresa un email válido');
-        return false;
-    }
-    
-    if (input.type === 'tel' && value && !validatePhone(value)) {
-        showError(input, 'Ingresa un teléfono válido');
-        return false;
-    }
-    
-    // Only clear error if input has a form-group parent and error exists
-    try {
-        if (input && input.closest('.form-group')) {
-            clearError(input);
-        }
-    } catch (err) {
-        console.warn('Error al limpiar error del campo:', err);
-    }
-    
-    return true;
-}
-
-// ============================================
-// FORM SUBMISSION
-// ============================================
-
-eventForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // Validate all fields
-    let isValid = true;
-    formInputs.forEach(input => {
-        if (!validateField(input)) {
-            isValid = false;
-        }
-    });
-    
-    if (!isValid) {
-        return;
-    }
-    
-    // Disable submit button
-    submitBtn.disabled = true;
-    submitBtn.querySelector('.btn-text').style.display = 'none';
-    submitBtn.querySelector('.btn-loader').style.display = 'inline-block';
-    
-    // Collect form data
-    const formData = {
-        nombre: document.getElementById('nombre').value,
-        email: document.getElementById('email').value,
-        telefono: document.getElementById('telefono').value,
-        tipoEvento: document.getElementById('tipoEvento').value,
-        personas: document.getElementById('personas').value,
-        fecha: document.getElementById('fecha').value,
-        notas: document.getElementById('notas').value,
-        timestamp: new Date().toISOString()
-    };
-    
-    try {
-        console.log('📋 Iniciando envío del formulario...');
-        console.log('📋 Datos del formulario:', formData);
-        
-        // Wait for EmailJS to be ready (max 5 seconds)
-        let attempts = 0;
-        const maxAttempts = 50;
-        
-        while ((typeof emailjs === 'undefined' || !window.emailjsReady) && attempts < maxAttempts) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-            attempts++;
-        }
-        
-        // Verify EmailJS is loaded
-        if (typeof emailjs === 'undefined') {
-            console.error('❌ EmailJS no está definido después de esperar');
-            throw new Error('EmailJS no está cargado. Por favor, recarga la página y verifica tu conexión a internet.');
-        }
-        
-        // Verify EmailJS has send method
-        if (typeof emailjs.send !== 'function') {
-            console.error('❌ EmailJS.send no es una función');
-            throw new Error('EmailJS no está inicializado correctamente. Por favor, recarga la página.');
-        }
-        
-        console.log('✅ EmailJS verificado correctamente');
-        
-        // Prepare email template parameters
-        const templateParams = {
-            from_name: formData.nombre.trim(),
-            from_email: formData.email.trim(),
-            phone: formData.telefono.trim(),
-            event_type: formData.tipoEvento,
-            people: formData.personas,
-            date: formData.fecha,
-            message: (formData.notas || '').trim() || 'Sin notas adicionales',
-            to_email: 'ebanopereiramiradorrestaurante@gmail.com'
-        };
-        
-        console.log('📧 Parámetros del email:', templateParams);
-        console.log('📤 Enviando email con EmailJS...');
-        
-        // Send email using EmailJS
-        const response = await emailjs.send(
-            'service_ldilgbs',      // Service ID - Configurado
-            'template_gp3o3tk',     // Template ID - Configurado
-            templateParams
-        );
-        
-        console.log('✅ Email enviado exitosamente:', response);
-        console.log('✅ Status:', response.status);
-        console.log('✅ Text:', response.text);
-        
-        // Success
-        closeFormModal();
-        setTimeout(() => {
-            openSuccessModal();
-        }, 300);
-        
-    } catch (error) {
-        console.error('Error completo:', error);
-        console.error('Detalles:', {
-            status: error.status,
-            text: error.text,
-            message: error.message
         });
         
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.querySelector('.btn-text').style.display = 'inline';
-        submitBtn.querySelector('.btn-loader').style.display = 'none';
-        
-        // Show user-friendly error message
-        let errorMessage = 'Hubo un error al enviar tu solicitud. ';
-        
-        if (error.text && error.text.includes('Invalid grant')) {
-            errorMessage = '⚠️ La conexión con Gmail expiró. Por favor, reconecta tu cuenta de Gmail en EmailJS. ';
-            errorMessage += 'Mientras tanto, puedes contactarnos directamente por WhatsApp al 310 482 7580.';
-        } else if (error.text) {
-            errorMessage += `Error: ${error.text}. `;
-        } else if (error.message) {
-            errorMessage += `Error: ${error.message}. `;
-        }
-        
-        errorMessage += 'Por favor, intenta nuevamente o contáctanos directamente por WhatsApp al 310 482 7580.';
-        
-        // Show error in modal instead of alert
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'form-error-message';
-        errorDiv.style.cssText = 'background: #fee; border: 2px solid #fcc; color: #c33; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 500;';
-        errorDiv.textContent = errorMessage;
-        
-        const form = document.getElementById('eventForm');
-        const existingError = form.querySelector('.form-error-message');
-        if (existingError) {
-            existingError.remove();
-        }
-        form.insertBefore(errorDiv, form.firstChild);
-        
-        // Scroll to error
-        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Remove error after 15 seconds
-        setTimeout(() => {
-            if (errorDiv.parentNode) {
-                errorDiv.remove();
-            }
-        }, 15000);
-        
-        return;
-    } finally {
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.querySelector('.btn-text').style.display = 'inline';
-        submitBtn.querySelector('.btn-loader').style.display = 'none';
-    }
-});
-
-// ============================================
-// EMAILJS INITIALIZATION
-// ============================================
-
-// EmailJS está inicializado en el HTML con Public Key: 2HXw__rvQyUIqX4FF
-// Service ID: service_ldilgbs
-// Template ID: template_gp3o3tk
-
-// ============================================
-// SCROLL ANIMATIONS
-// ============================================
-
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const scrollObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe elements for scroll animations
-document.querySelectorAll('.why-card, .event-card, .testimonial-card, .instagram-cta-content').forEach((el, index) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = `opacity 0.8s ease ${index * 0.1}s, transform 0.8s ease ${index * 0.1}s`;
-    scrollObserver.observe(el);
-});
-
-// Scroll indicator click
-const scrollIndicator = document.querySelector('.scroll-indicator');
-if (scrollIndicator) {
-    scrollIndicator.addEventListener('click', () => {
-        window.scrollTo({
-            top: window.innerHeight,
-            behavior: 'smooth'
-        });
-    });
-}
-
-// ============================================
-// HERO PARALLAX (Desktop only)
-// ============================================
-
-if (window.innerWidth >= 1024) {
-    const heroImage = document.querySelector('.hero-image');
-    
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const hero = document.querySelector('.hero');
-        const heroHeight = hero.offsetHeight;
-        
-        if (scrolled < heroHeight && heroImage) {
-            heroImage.style.transform = `translateY(${scrolled * 0.5}px)`;
-        }
-    });
-}
-
-// ============================================
-// INITIALIZE ON LOAD
-// ============================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Add fade-in to hero content
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent) {
-        heroContent.style.opacity = '0';
-        setTimeout(() => {
-            heroContent.style.opacity = '1';
-        }, 100);
-    }
-});
-
-// ============================================
-// PERFORMANCE: Preload critical images
-// ============================================
-
-const criticalImages = [
-    'images/hero-atardecer.jpg',
-    'images/why-section-vista.jpg',
-    'images/why-section-espacios.jpg',
-    'images/why-section-experiencia.jpg'
-];
-
-criticalImages.forEach(src => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = src;
-    document.head.appendChild(link);
-});
-
-// ============================================
-// STATS ANIMATION
-// ============================================
-
-function animateStats() {
-    const stats = document.querySelectorAll('.stat-number');
-    
-    stats.forEach(stat => {
-        const target = parseInt(stat.getAttribute('data-target'));
-        const duration = 2000;
-        const increment = target / (duration / 16);
-        let current = 0;
-        
-        const updateStat = () => {
-            current += increment;
-            if (current < target) {
-                stat.textContent = Math.floor(current);
-                requestAnimationFrame(updateStat);
-            } else {
-                stat.textContent = target + (target === 360 ? '°' : target === 1500 ? '' : '+');
-            }
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    updateStat();
-                    observer.unobserve(entry.target);
+        // Navbar scroll effect
+        if (navbar) {
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll > 100) {
+                    navbar.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.3)';
+                } else {
+                    navbar.style.boxShadow = 'none';
                 }
             });
-        }, { threshold: 0.5 });
-        
-        observer.observe(stat);
-    });
-}
-
-// ============================================
-// FOOD CAROUSEL
-// ============================================
-
-function initFoodCarousel() {
-    const carousel = document.getElementById('foodCarousel');
-    const prevBtn = document.getElementById('foodPrev');
-    const nextBtn = document.getElementById('foodNext');
-    
-    if (!carousel) return;
-    
-    // Food images (load dynamically from folder)
-    const foodImages = [];
-    const foodFolder = 'images/food/';
-    const foodFiles = [
-        'Gemini_Generated_Image_8eefhc8eefhc8eef.png',
-        'Gemini_Generated_Image_8ygk0n8ygk0n8ygk.png',
-        'Gemini_Generated_Image_b2wrp3b2wrp3b2wr.png',
-        'Gemini_Generated_Image_dwbbx0dwbbx0dwbb.png',
-        'Gemini_Generated_Image_k4ok3pk4ok3pk4ok.png',
-        'Gemini_Generated_Image_v6w8kav6w8kav6w8.png',
-        'Gemini_Generated_Image_w94k70w94k70w94k.png',
-        'Generated Image November 29, 2025 - 5_29PM (1).png'
-    ];
-    
-    foodFiles.forEach(file => {
-        foodImages.push(foodFolder + file);
-    });
-    
-    // Create carousel items
-    foodImages.forEach((src, index) => {
-        const item = document.createElement('div');
-        item.className = 'food-carousel-item';
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = `Plato ${index + 1} de Ébano Mirador`;
-        img.loading = 'lazy';
-        item.appendChild(img);
-        carousel.appendChild(item);
-    });
-    
-    // Carousel navigation
-    if (prevBtn && nextBtn) {
-        prevBtn.addEventListener('click', () => {
-            carousel.scrollBy({ left: -250, behavior: 'smooth' });
-        });
-        
-        nextBtn.addEventListener('click', () => {
-            carousel.scrollBy({ left: 250, behavior: 'smooth' });
-        });
+        }
     }
     
-    // Auto-scroll (optional)
-    let autoScrollInterval;
-    const startAutoScroll = () => {
-        autoScrollInterval = setInterval(() => {
-            if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth - 10) {
-                carousel.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                carousel.scrollBy({ left: 250, behavior: 'smooth' });
-            }
-        }, 4000);
-    };
+    // ============================================
+    // SMOOTH SCROLL
+    // ============================================
     
-    // Pause on hover
-    carousel.addEventListener('mouseenter', () => {
-        if (autoScrollInterval) clearInterval(autoScrollInterval);
-    });
-    
-    carousel.addEventListener('mouseleave', () => {
-        startAutoScroll();
-    });
-    
-    startAutoScroll();
-}
-
-// ============================================
-// FAQ FUNCTIONALITY
-// ============================================
-
-function initFAQ() {
-    const faqItems = document.querySelectorAll('.faq-item');
-    
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        
-        question.addEventListener('click', () => {
-            const isActive = item.classList.contains('active');
-            
-            // Close all items
-            faqItems.forEach(otherItem => {
-                otherItem.classList.remove('active');
+    function initSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                
+                e.preventDefault();
+                const target = document.querySelector(href);
+                
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
             });
-            
-            // Toggle current item
-            if (!isActive) {
-                item.classList.add('active');
+        });
+    }
+    
+    // ============================================
+    // FORM MODAL FUNCTIONALITY
+    // ============================================
+    
+    let formModal, successModal, eventForm, submitBtn, tipoEventoSelect;
+    
+    function initFormModal() {
+        formModal = document.getElementById('formModal');
+        successModal = document.getElementById('successModal');
+        eventForm = document.getElementById('eventForm');
+        submitBtn = document.getElementById('submitBtn');
+        tipoEventoSelect = document.getElementById('tipoEvento');
+        
+        const openFormBtn = document.getElementById('openFormBtn');
+        const heroCtaBtn = document.getElementById('heroCtaBtn');
+        const footerFormBtn = document.getElementById('footerFormBtn');
+        const closeModal = document.getElementById('closeModal');
+        const closeSuccessModal = document.getElementById('closeSuccessModal');
+        
+        if (!formModal || !successModal || !eventForm) {
+            console.warn('⚠️ Elementos del formulario no encontrados');
+            return;
+        }
+        
+        // Open form modal
+        function openFormModal(eventType = '') {
+            if (eventType && tipoEventoSelect) {
+                tipoEventoSelect.value = eventType;
+            }
+            if (formModal) {
+                formModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        // Close form modal
+        function closeFormModal() {
+            if (formModal) {
+                formModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            if (eventForm) {
+                eventForm.reset();
+                clearErrors();
+            }
+        }
+        
+        // Open success modal
+        function openSuccessModal() {
+            if (formModal) formModal.classList.remove('active');
+            if (successModal) {
+                successModal.style.display = 'flex';
+                successModal.classList.add('active');
+            }
+        }
+        
+        // Close success modal
+        function closeSuccessModalFunc() {
+            if (successModal) {
+                successModal.classList.remove('active');
+                setTimeout(() => {
+                    if (successModal) {
+                        successModal.style.display = 'none';
+                    }
+                }, 300);
+            }
+            document.body.style.overflow = '';
+        }
+        
+        // Event listeners
+        if (openFormBtn) openFormBtn.addEventListener('click', () => openFormModal());
+        if (heroCtaBtn) heroCtaBtn.addEventListener('click', () => openFormModal());
+        if (footerFormBtn) footerFormBtn.addEventListener('click', () => openFormModal());
+        if (closeModal) closeModal.addEventListener('click', closeFormModal);
+        if (closeSuccessModal) closeSuccessModal.addEventListener('click', closeSuccessModalFunc);
+        
+        // Close modal on overlay click
+        if (formModal) {
+            formModal.addEventListener('click', (e) => {
+                if (e.target === formModal) {
+                    closeFormModal();
+                }
+            });
+        }
+        
+        if (successModal) {
+            successModal.addEventListener('click', (e) => {
+                if (e.target === successModal) {
+                    closeSuccessModalFunc();
+                }
+            });
+        }
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (formModal && formModal.classList.contains('active')) {
+                    closeFormModal();
+                }
+                if (successModal && successModal.classList.contains('active')) {
+                    closeSuccessModalFunc();
+                }
             }
         });
-    });
-}
-
-// ============================================
-// URGENCY BANNER
-// ============================================
-
-function initUrgencyBanner() {
-    const banner = document.getElementById('urgencyBanner');
-    const closeBtn = document.getElementById('urgencyClose');
-    
-    if (!banner) {
-        console.warn('⚠️ Banner no encontrado');
-        return;
+        
+        // Event cards - Si EmailJS funciona, abre formulario. Si no, redirige a WhatsApp
+        document.querySelectorAll('.btn-event').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const eventType = btn.getAttribute('data-event-type');
+                
+                // Verificar si EmailJS está disponible
+                if (typeof emailjs === 'undefined' || !window.emailjsReady || window.emailjsFailed) {
+                    // EmailJS no funciona - Redirigir directamente a WhatsApp
+                    console.log('⚠️ EmailJS no disponible - Redirigiendo a WhatsApp para:', eventType);
+                    const whatsappMessage = encodeURIComponent(
+                        `Hola Ébano Mirador 👋\n\n` +
+                        `Me interesa información sobre: *${eventType}*\n\n` +
+                        `¿Podrían ayudarme con más detalles?`
+                    );
+                    window.open(`https://wa.me/573104827580?text=${whatsappMessage}`, '_blank');
+                } else {
+                    // EmailJS funciona - Abrir formulario
+                    openFormModal(eventType);
+                }
+            });
+        });
+        
+        // Guardar funciones globalmente para uso en otras funciones
+        window.openFormModal = openFormModal;
+        window.closeFormModal = closeFormModal;
+        window.openSuccessModal = openSuccessModal;
     }
     
-    // Show banner after 2 seconds
-    setTimeout(() => {
-        if (!localStorage.getItem('urgencyBannerClosed')) {
-            banner.classList.add('show');
-            document.body.classList.add('urgency-visible');
-            console.log('✅ Banner mostrado');
-        }
-    }, 2000);
+    // ============================================
+    // FORM VALIDATION
+    // ============================================
     
-    // Close banner - Multiple event listeners for reliability
-    if (closeBtn) {
-        // Remove any existing listeners by cloning
-        const newCloseBtn = closeBtn.cloneNode(true);
-        closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+    
+    function validatePhone(phone) {
+        const re = /^[\d\s\+\-\(\)]+$/;
+        return re.test(phone) && phone.replace(/\D/g, '').length >= 10;
+    }
+    
+    function showError(input, message) {
+        // Validación estricta - nunca acceder a propiedades sin verificar
+        if (!input) return;
+        if (typeof input !== 'object') return;
+        if (!message) return;
         
-        // Add click event
-        newCloseBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
+        try {
+            // Verificar que input tenga el método closest
+            if (typeof input.closest !== 'function') return;
             
-            console.log('🔴 Botón de cerrar clickeado');
+            const formGroup = input.closest('.form-group');
+            if (!formGroup) return;
             
-            const bannerEl = document.getElementById('urgencyBanner');
-            if (bannerEl) {
-                bannerEl.classList.remove('show');
-                document.body.classList.remove('urgency-visible');
-                localStorage.setItem('urgencyBannerClosed', 'true');
-                console.log('✅ Banner cerrado');
+            // Verificar que formGroup tenga querySelector
+            if (typeof formGroup.querySelector !== 'function') return;
+            
+            const errorMessage = formGroup.querySelector('.error-message');
+            
+            // Validación estricta antes de acceder a propiedades
+            if (errorMessage && typeof errorMessage === 'object') {
+                if (typeof errorMessage.textContent !== 'undefined') {
+                    errorMessage.textContent = message;
+                }
+                
+                if (errorMessage.classList && 
+                    typeof errorMessage.classList === 'object' &&
+                    typeof errorMessage.classList.add === 'function') {
+                    errorMessage.classList.add('show');
+                }
+            }
+            
+            // Validación estricta antes de acceder a classList del input
+            if (input.classList && 
+                typeof input.classList === 'object' &&
+                typeof input.classList.add === 'function') {
+                input.classList.add('error');
+            }
+        } catch (err) {
+            // Silenciar errores para no llenar la consola
+            if (console && typeof console.warn === 'function') {
+                console.warn('Error al mostrar error (manejado):', err.message || err);
+            }
+        }
+    }
+    
+    function clearError(input) {
+        // Validación estricta - nunca acceder a propiedades sin verificar
+        if (!input) return;
+        if (typeof input !== 'object') return;
+        
+        try {
+            // Verificar que input tenga el método closest
+            if (typeof input.closest !== 'function') return;
+            
+            const formGroup = input.closest('.form-group');
+            if (!formGroup) return;
+            
+            // Verificar que formGroup tenga querySelector
+            if (typeof formGroup.querySelector !== 'function') return;
+            
+            const errorMessage = formGroup.querySelector('.error-message');
+            
+            // Validación estricta antes de acceder a classList
+            if (errorMessage && 
+                typeof errorMessage === 'object' && 
+                errorMessage.classList && 
+                typeof errorMessage.classList === 'object' &&
+                typeof errorMessage.classList.remove === 'function') {
+                errorMessage.classList.remove('show');
+                if (typeof errorMessage.textContent !== 'undefined') {
+                    errorMessage.textContent = '';
+                }
+            }
+            
+            // Validación estricta antes de acceder a classList del input
+            if (input.classList && 
+                typeof input.classList === 'object' &&
+                typeof input.classList.remove === 'function') {
+                input.classList.remove('error');
+            }
+        } catch (err) {
+            // Silenciar errores para no llenar la consola, pero loggear en desarrollo
+            if (console && typeof console.warn === 'function') {
+                console.warn('Error al limpiar error (manejado):', err.message || err);
+            }
+        }
+    }
+    
+    function clearErrors() {
+        try {
+            const errorInputs = document.querySelectorAll('.error');
+            if (errorInputs && errorInputs.length > 0) {
+                errorInputs.forEach(input => {
+                    if (input && input.closest('.form-group')) {
+                        clearError(input);
+                    }
+                });
+            }
+        } catch (err) {
+            console.warn('Error al limpiar errores:', err);
+        }
+    }
+    
+    function validateField(input) {
+        if (!input) return true;
+        
+        const value = input.value ? input.value.trim() : '';
+        
+        if (input.hasAttribute('required') && !value) {
+            showError(input, 'Este campo es obligatorio');
+            return false;
+        }
+        
+        if (input.type === 'email' && value && !validateEmail(value)) {
+            showError(input, 'Ingresa un email válido');
+            return false;
+        }
+        
+        if (input.type === 'tel' && value && !validatePhone(value)) {
+            showError(input, 'Ingresa un teléfono válido');
+            return false;
+        }
+        
+        // Clear error if valid - con validación estricta
+        try {
+            if (input && 
+                typeof input === 'object' &&
+                typeof input.closest === 'function') {
+                const formGroup = input.closest('.form-group');
+                if (formGroup) {
+                    clearError(input);
+                }
+            }
+        } catch (err) {
+            // Error manejado silenciosamente
+            if (console && typeof console.warn === 'function') {
+                console.warn('Error al limpiar error del campo (manejado):', err.message || err);
+            }
+        }
+        
+        return true;
+    }
+    
+    function initFormValidation() {
+        if (!eventForm) {
+            console.warn('⚠️ Formulario no encontrado para validación');
+            return;
+        }
+        
+        const formInputs = eventForm.querySelectorAll('input, select, textarea');
+        
+        if (!formInputs || formInputs.length === 0) {
+            console.warn('⚠️ No se encontraron campos del formulario');
+            return;
+        }
+        
+        // Real-time validation - con validaciones estrictas
+        formInputs.forEach(input => {
+            if (!input) return;
+            if (typeof input !== 'object') return;
+            if (typeof input.addEventListener !== 'function') return;
+            
+            // Validación en blur
+            try {
+                input.addEventListener('blur', () => {
+                    if (input && typeof input === 'object') {
+                        validateField(input);
+                    }
+                });
+            } catch (err) {
+                console.warn('Error al agregar listener blur:', err);
+            }
+            
+            // Validación en input (solo si ya tiene error)
+            try {
+                input.addEventListener('input', () => {
+                    if (input && 
+                        typeof input === 'object' &&
+                        input.classList && 
+                        typeof input.classList === 'object' &&
+                        typeof input.classList.contains === 'function' &&
+                        input.classList.contains('error')) {
+                        validateField(input);
+                    }
+                });
+            } catch (err) {
+                console.warn('Error al agregar listener input:', err);
             }
         });
         
-        // Also add mousedown for better responsiveness
-        newCloseBtn.addEventListener('mousedown', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+        // Form submission
+        eventForm.addEventListener('submit', handleFormSubmit);
+    }
+    
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+        
+        if (!eventForm || !submitBtn) return;
+        
+        // Get form inputs dynamically
+        const formInputs = eventForm.querySelectorAll('input, select, textarea');
+        
+        // Validate all fields
+        let isValid = true;
+        formInputs.forEach(input => {
+            if (input && !validateField(input)) {
+                isValid = false;
+            }
         });
-    } else {
-        console.error('❌ Botón de cerrar no encontrado');
-    }
-    
-    // Also close on banner click (outside the content)
-    banner.addEventListener('click', (e) => {
-        if (e.target === banner) {
-            banner.classList.remove('show');
-            document.body.classList.remove('urgency-visible');
-            localStorage.setItem('urgencyBannerClosed', 'true');
+        
+        if (!isValid) {
+            return;
         }
-    });
-}
-
-// ============================================
-// INITIALIZE ALL
-// ============================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Add fade-in to hero content
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent) {
-        heroContent.style.opacity = '0';
-        setTimeout(() => {
-            heroContent.style.opacity = '1';
-        }, 100);
+        
+        // Disable submit button
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoader = submitBtn.querySelector('.btn-loader');
+        
+        if (btnText) btnText.style.display = 'none';
+        if (btnLoader) btnLoader.style.display = 'inline-block';
+        submitBtn.disabled = true;
+        
+        // Collect form data
+        const formData = {
+            nombre: document.getElementById('nombre')?.value || '',
+            email: document.getElementById('email')?.value || '',
+            telefono: document.getElementById('telefono')?.value || '',
+            tipoEvento: document.getElementById('tipoEvento')?.value || '',
+            personas: document.getElementById('personas')?.value || '',
+            fecha: document.getElementById('fecha')?.value || '',
+            notas: document.getElementById('notas')?.value || '',
+            timestamp: new Date().toISOString()
+        };
+        
+        try {
+            console.log('📋 Iniciando envío del formulario...');
+            console.log('📋 Datos del formulario:', formData);
+            
+            // Verificar EmailJS
+            let attempts = 0;
+            const maxAttempts = 100;
+            
+            while ((typeof emailjs === 'undefined' || !window.emailjsReady) && attempts < maxAttempts) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                attempts++;
+            }
+            
+            // Si EmailJS no está disponible, redirigir a WhatsApp
+            if (typeof emailjs === 'undefined' || !window.emailjsReady || window.emailjsFailed) {
+                console.warn('⚠️ EmailJS no disponible - Redirigiendo a WhatsApp');
+                const whatsappMessage = encodeURIComponent(
+                    `Hola Ébano Mirador, quiero información sobre:\n\n` +
+                    `Tipo de Evento: ${formData.tipoEvento}\n` +
+                    `Personas: ${formData.personas}\n` +
+                    `Fecha Tentativa: ${formData.fecha}\n` +
+                    `Nombre: ${formData.nombre}\n` +
+                    `Email: ${formData.email}\n` +
+                    `Teléfono: ${formData.telefono}\n` +
+                    (formData.notas ? `Notas: ${formData.notas}` : '')
+                );
+                window.open(`https://wa.me/573104827580?text=${whatsappMessage}`, '_blank');
+                
+                // Cerrar modal y mostrar mensaje
+                if (window.closeFormModal) window.closeFormModal();
+                alert('El formulario no está disponible. Te hemos redirigido a WhatsApp para que puedas contactarnos directamente.');
+                return;
+            }
+            
+            // Preparar parámetros para EmailJS
+            const templateParams = {
+                from_name: formData.nombre.trim(),
+                from_email: formData.email.trim(),
+                phone: formData.telefono.trim(),
+                event_type: formData.tipoEvento,
+                people: formData.personas,
+                date: formData.fecha,
+                message: (formData.notas || '').trim() || 'Sin notas adicionales',
+                to_email: 'ebanopereiramiradorrestaurante@gmail.com'
+            };
+            
+            console.log('📤 Enviando email con EmailJS...');
+            
+            // Enviar con EmailJS
+            const response = await emailjs.send(
+                'service_ldilgbs',
+                'template_gp3o3tk',
+                templateParams
+            );
+            
+            console.log('✅ Email enviado exitosamente:', response);
+            
+            // Success
+            if (window.closeFormModal) window.closeFormModal();
+            setTimeout(() => {
+                if (window.openSuccessModal) window.openSuccessModal();
+            }, 300);
+            
+        } catch (error) {
+            console.error('❌ Error al enviar formulario:', error);
+            
+            // Show error message
+            let errorMessage = 'Hubo un error al enviar tu solicitud. ';
+            
+            // Si EmailJS falla, ofrecer redirigir a WhatsApp
+            if (error.text && error.text.includes('Invalid grant')) {
+                errorMessage = '⚠️ La conexión con Gmail expiró. ';
+            } else if (error.message) {
+                errorMessage += `Error: ${error.message}. `;
+            }
+            
+            // Agregar opción de WhatsApp como alternativa
+            errorMessage += '\n\n¿Deseas contactarnos directamente por WhatsApp?';
+            
+            errorMessage += 'Por favor, intenta nuevamente o contáctanos directamente por WhatsApp al 310 482 7580.';
+            
+            // Mostrar error y ofrecer WhatsApp como alternativa
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'form-error-message';
+            errorDiv.style.cssText = 'background: #fee; border: 2px solid #fcc; color: #c33; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 500;';
+            
+            const errorText = document.createElement('div');
+            errorText.textContent = errorMessage;
+            errorDiv.appendChild(errorText);
+            
+            // Botón para redirigir a WhatsApp
+            const whatsappBtn = document.createElement('button');
+            whatsappBtn.textContent = '📱 Contactar por WhatsApp';
+            whatsappBtn.style.cssText = 'margin-top: 15px; padding: 12px 24px; background: #25D366; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 16px;';
+            whatsappBtn.addEventListener('click', () => {
+                const formData = {
+                    nombre: document.getElementById('nombre')?.value || '',
+                    email: document.getElementById('email')?.value || '',
+                    telefono: document.getElementById('telefono')?.value || '',
+                    tipoEvento: document.getElementById('tipoEvento')?.value || '',
+                    personas: document.getElementById('personas')?.value || '',
+                    fecha: document.getElementById('fecha')?.value || '',
+                    notas: document.getElementById('notas')?.value || ''
+                };
+                
+                const whatsappMessage = encodeURIComponent(
+                    `Hola Ébano Mirador 👋\n\n` +
+                    `Quiero información sobre mi evento:\n\n` +
+                    `*Tipo de Evento:* ${formData.tipoEvento}\n` +
+                    `*Número de Personas:* ${formData.personas}\n` +
+                    `*Fecha Tentativa:* ${formData.fecha}\n` +
+                    `*Nombre:* ${formData.nombre}\n` +
+                    `*Email:* ${formData.email}\n` +
+                    `*Teléfono:* ${formData.telefono}\n` +
+                    (formData.notas ? `*Notas:* ${formData.notas}` : '')
+                );
+                window.open(`https://wa.me/573104827580?text=${whatsappMessage}`, '_blank');
+                
+                // Cerrar modal después de abrir WhatsApp
+                if (window.closeFormModal) {
+                    setTimeout(() => {
+                        window.closeFormModal();
+                    }, 500);
+                }
+            });
+            errorDiv.appendChild(whatsappBtn);
+            
+            const form = document.getElementById('eventForm');
+            if (form) {
+                const existingError = form.querySelector('.form-error-message');
+                if (existingError) existingError.remove();
+                form.insertBefore(errorDiv, form.firstChild);
+                errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        } finally {
+            // Re-enable submit button
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                const btnText = submitBtn.querySelector('.btn-text');
+                const btnLoader = submitBtn.querySelector('.btn-loader');
+                if (btnText) btnText.style.display = 'inline';
+                if (btnLoader) btnLoader.style.display = 'none';
+            }
+        }
     }
     
-    // Set minimum date for fecha input (today) - prevent past dates
-    const fechaInput = document.getElementById('fecha');
-    if (fechaInput) {
+    // ============================================
+    // DATE FIELD INITIALIZATION
+    // ============================================
+    
+    function initDateField() {
+        const fechaInput = document.getElementById('fecha');
+        if (!fechaInput) {
+            console.warn('⚠️ Campo de fecha no encontrado');
+            return;
+        }
+        
+        // Calcular fecha mínima (hoy) dinámicamente
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Set to start of day
+        today.setHours(0, 0, 0, 0);
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         const minDate = `${year}-${month}-${day}`;
+        
+        // FORZAR que el campo sea tipo date (algunos navegadores lo cambian)
+        fechaInput.type = 'date';
+        fechaInput.setAttribute('type', 'date');
+        
+        // Establecer fecha mínima
         fechaInput.min = minDate;
         fechaInput.setAttribute('min', minDate);
-        console.log('✅ Fecha mínima establecida:', minDate);
+        
+        // Asegurar que el campo muestre el selector completo
+        fechaInput.setAttribute('inputmode', 'none');
+        
+        // En móviles, forzar el date picker nativo
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            fechaInput.setAttribute('readonly', 'readonly');
+            fechaInput.addEventListener('focus', function() {
+                this.removeAttribute('readonly');
+                this.showPicker && this.showPicker();
+            });
+        }
+        
+        // Verificar selección de fecha
+        fechaInput.addEventListener('change', function() {
+            if (this.value) {
+                const selectedDate = new Date(this.value + 'T00:00:00');
+                const dia = selectedDate.getDate();
+                const mes = selectedDate.getMonth() + 1;
+                const año = selectedDate.getFullYear();
+                
+                console.log('✅ Fecha seleccionada:', {
+                    fechaCompleta: this.value,
+                    dia: dia,
+                    mes: mes,
+                    año: año,
+                    formato: `${dia}/${mes}/${año}`
+                });
+            }
+        });
+        
+        // Log de configuración
+        console.log('✅ Campo de fecha configurado - permite seleccionar día, mes y año');
+        console.log('   Tipo:', fechaInput.type);
+        console.log('   Fecha mínima:', minDate);
     }
     
-    // Initialize new features
-    animateStats();
-    initFoodCarousel();
-    initFAQ();
-    initUrgencyBanner();
-});
-
+    // ============================================
+    // SCROLL ANIMATIONS
+    // ============================================
+    
+    function initScrollAnimations() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe elements for scroll animations
+        document.querySelectorAll('.why-card, .event-card, .testimonial-card, .instagram-cta-content').forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = `opacity 0.8s ease ${index * 0.1}s, transform 0.8s ease ${index * 0.1}s`;
+            scrollObserver.observe(el);
+        });
+        
+        // Scroll indicator click
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        if (scrollIndicator) {
+            scrollIndicator.addEventListener('click', () => {
+                window.scrollTo({
+                    top: window.innerHeight,
+                    behavior: 'smooth'
+                });
+            });
+        }
+        
+        // Hero content fade-in
+        const heroContent = document.querySelector('.hero-content');
+        if (heroContent) {
+            heroContent.style.opacity = '0';
+            setTimeout(() => {
+                heroContent.style.opacity = '1';
+            }, 100);
+        }
+    }
+    
+    // ============================================
+    // HERO PARALLAX (Desktop only)
+    // ============================================
+    
+    function initHeroParallax() {
+        if (window.innerWidth >= 1024) {
+            const heroImage = document.querySelector('.hero-image');
+            
+            if (heroImage) {
+                window.addEventListener('scroll', () => {
+                    const scrolled = window.pageYOffset;
+                    const hero = document.querySelector('.hero');
+                    if (hero) {
+                        const heroHeight = hero.offsetHeight;
+                        if (scrolled < heroHeight) {
+                            heroImage.style.transform = `translateY(${scrolled * 0.5}px)`;
+                        }
+                    }
+                });
+            }
+        }
+    }
+    
+    // ============================================
+    // STATS ANIMATION
+    // ============================================
+    
+    function initStats() {
+        const stats = document.querySelectorAll('.stat-number');
+        
+        stats.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-target'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const updateStat = () => {
+                current += increment;
+                if (current < target) {
+                    stat.textContent = Math.floor(current);
+                    requestAnimationFrame(updateStat);
+                } else {
+                    stat.textContent = target + (target === 360 ? '°' : target === 1500 ? '' : '+');
+                }
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        updateStat();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(stat);
+        });
+    }
+    
+    // ============================================
+    // FOOD CAROUSEL
+    // ============================================
+    
+    function initFoodCarousel() {
+        const carousel = document.getElementById('foodCarousel');
+        const prevBtn = document.getElementById('foodPrev');
+        const nextBtn = document.getElementById('foodNext');
+        
+        if (!carousel) return;
+        
+        const foodImages = [
+            'images/food/Gemini_Generated_Image_8eefhc8eefhc8eef.png',
+            'images/food/Gemini_Generated_Image_8ygk0n8ygk0n8ygk.png',
+            'images/food/Gemini_Generated_Image_b2wrp3b2wrp3b2wr.png',
+            'images/food/Gemini_Generated_Image_dwbbx0dwbbx0dwbb.png',
+            'images/food/Gemini_Generated_Image_k4ok3pk4ok3pk4ok.png',
+            'images/food/Gemini_Generated_Image_v6w8kav6w8kav6w8.png',
+            'images/food/Gemini_Generated_Image_w94k70w94k70w94k.png',
+            'images/food/Generated Image November 29, 2025 - 5_29PM (1).png'
+        ];
+        
+        // Create carousel items
+        foodImages.forEach((src, index) => {
+            const item = document.createElement('div');
+            item.className = 'food-carousel-item';
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = `Plato ${index + 1} de Ébano Mirador`;
+            img.loading = 'lazy';
+            item.appendChild(img);
+            carousel.appendChild(item);
+        });
+        
+        // Carousel navigation
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: -250, behavior: 'smooth' });
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: 250, behavior: 'smooth' });
+            });
+        }
+        
+        // Auto-scroll
+        let autoScrollInterval;
+        const startAutoScroll = () => {
+            autoScrollInterval = setInterval(() => {
+                if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth - 10) {
+                    carousel.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    carousel.scrollBy({ left: 250, behavior: 'smooth' });
+                }
+            }, 4000);
+        };
+        
+        carousel.addEventListener('mouseenter', () => {
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
+        });
+        
+        carousel.addEventListener('mouseleave', () => {
+            startAutoScroll();
+        });
+        
+        startAutoScroll();
+    }
+    
+    // ============================================
+    // FAQ FUNCTIONALITY
+    // ============================================
+    
+    function initFAQ() {
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            if (!question) return;
+            
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                });
+                
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    }
+    
+    // ============================================
+    // URGENCY BANNER
+    // ============================================
+    
+    function initUrgencyBanner() {
+        const banner = document.getElementById('urgencyBanner');
+        const closeBtn = document.getElementById('urgencyClose');
+        
+        if (!banner) return;
+        
+        // Show banner after 2 seconds
+        setTimeout(() => {
+            if (!localStorage.getItem('urgencyBannerClosed')) {
+                banner.classList.add('show');
+                document.body.classList.add('urgency-visible');
+            }
+        }, 2000);
+        
+        // Close banner
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                banner.classList.remove('show');
+                document.body.classList.remove('urgency-visible');
+                localStorage.setItem('urgencyBannerClosed', 'true');
+            });
+        }
+        
+        // Close on banner click (outside content)
+        banner.addEventListener('click', (e) => {
+            if (e.target === banner) {
+                banner.classList.remove('show');
+                document.body.classList.remove('urgency-visible');
+                localStorage.setItem('urgencyBannerClosed', 'true');
+            }
+        });
+    }
+    
+})();
