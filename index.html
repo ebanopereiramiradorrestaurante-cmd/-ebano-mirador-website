@@ -715,7 +715,15 @@
                     if (typeof emailjs !== 'undefined' && typeof emailjs.init === 'function') {
                         emailjs.init(PUBLIC_KEY);
                         window.emailjsReady = true;
+                        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
                         console.log('✅ EmailJS inicializado correctamente');
+                        console.log('📋 Configuración EmailJS:');
+                        console.log('   - Public Key: ' + PUBLIC_KEY);
+                        console.log('   - Service ID: service_ldilgbs');
+                        console.log('   - Template ID: template_gp3o3tk');
+                        console.log('   - Email destino: ebanopereiramiradorrestaurante@gmail.com');
+                        console.log('   - Estado: Listo para enviar emails');
+                        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
                         return true;
                     }
                     return false;
@@ -746,7 +754,7 @@
             }
         })();
     </script>
-    <script src="script.js?v=fix-412-error-2025"></script>
+    <script src="script.js?v=verify-emailjs-2025"></script>
 </body>
 </html>
 

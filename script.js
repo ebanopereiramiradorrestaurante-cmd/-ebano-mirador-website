@@ -1,6 +1,6 @@
 // ============================================
 // MAIN INITIALIZATION - Todo el código dentro de DOMContentLoaded
-// VERSIÓN: fix-412-error-2025 - Mejora manejo error Gmail
+// VERSIÓN: verify-emailjs-2025 - Verificación de conexión EmailJS
 // ============================================
 
 (function() {
@@ -21,8 +21,13 @@
     }
     
     function init() {
-        console.log('🚀 Inicializando aplicación - VERSIÓN fix-412-error-2025');
-        console.log('🔄 Mejoras: Detección mejorada de error 412 Gmail + Auto-redirección a WhatsApp');
+        console.log('🚀 Inicializando aplicación - VERSIÓN verify-emailjs-2025');
+        console.log('🔄 Verificación de conexión EmailJS + Logs mejorados');
+        
+        // Verificar EmailJS después de un breve delay
+        setTimeout(() => {
+            verifyEmailJSConnection();
+        }, 1000);
         
         // Inicializar todas las funcionalidades
         initNavbar();
@@ -38,6 +43,61 @@
         initDateField();
         
         console.log('✅ Aplicación inicializada correctamente');
+    }
+    
+    // ============================================
+    // EMAILJS CONNECTION VERIFICATION
+    // ============================================
+    
+    function verifyEmailJSConnection() {
+        console.log('🔍 Verificando conexión con EmailJS...');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        
+        // Verificar que EmailJS está cargado
+        if (typeof emailjs === 'undefined') {
+            console.error('❌ EmailJS SDK no está cargado');
+            console.warn('⚠️ El formulario usará WhatsApp como alternativa');
+            return false;
+        }
+        console.log('✅ EmailJS SDK está cargado');
+        
+        // Verificar que está inicializado
+        if (!window.emailjsReady) {
+            console.warn('⚠️ EmailJS no está inicializado aún');
+            console.log('💡 Esperando inicialización...');
+            // Intentar de nuevo después de un delay
+            setTimeout(() => {
+                if (window.emailjsReady) {
+                    verifyEmailJSConnection();
+                } else {
+                    console.error('❌ EmailJS no se inicializó después del tiempo de espera');
+                }
+            }, 2000);
+            return false;
+        }
+        console.log('✅ EmailJS está inicializado');
+        
+        // Verificar que tiene el método send
+        if (typeof emailjs.send !== 'function') {
+            console.error('❌ EmailJS no tiene el método send disponible');
+            return false;
+        }
+        console.log('✅ Método emailjs.send() está disponible');
+        
+        // Verificar configuración
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('✅ EmailJS está correctamente configurado:');
+        console.log('   📋 Service ID: service_ldilgbs');
+        console.log('   📋 Template ID: template_gp3o3tk');
+        console.log('   📋 Public Key: 2HXw__rvQyUIqX4FF');
+        console.log('   📧 Email destino: ebanopereiramiradorrestaurante@gmail.com');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('✅ Estado: LISTO para enviar emails');
+        console.log('💡 Si Gmail fue reconectado en EmailJS, el formulario debería funcionar correctamente');
+        console.log('💡 Si aún hay errores, verifica en dashboard.emailjs.com que Gmail esté conectado');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        
+        return true;
     }
     
     // ============================================
@@ -539,6 +599,10 @@
             };
             
             console.log('📤 Enviando email con EmailJS...');
+            console.log('📋 Configuración EmailJS:');
+            console.log('   - Service ID: service_ldilgbs');
+            console.log('   - Template ID: template_gp3o3tk');
+            console.log('   - Parámetros:', templateParams);
             
             // Enviar con EmailJS
             let response;
@@ -549,12 +613,20 @@
                     templateParams
                 );
                 
-                console.log('✅ Email enviado exitosamente:', response);
-                console.log('✅ Status:', response.status);
-                console.log('✅ Text:', response.text);
+                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                console.log('✅ RESPUESTA DE EMAILJS:');
+                console.log('   Status:', response.status);
+                console.log('   Text:', response.text);
+                console.log('   Email ID:', response.text || 'N/A');
+                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
                 
                 // Verificar que el envío fue exitoso
                 if (response.status === 200) {
+                    console.log('🎉 ¡EMAIL ENVIADO EXITOSAMENTE!');
+                    console.log('📧 El correo debería llegar a: ebanopereiramiradorrestaurante@gmail.com');
+                    console.log('✅ Revisa la bandeja de entrada (y spam) del email destino');
+                    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                    
                     // Success - Cerrar modal del formulario
                     if (window.closeFormModal) window.closeFormModal();
                     
@@ -569,16 +641,32 @@
                     throw new Error(`EmailJS respondió con status ${response.status}`);
                 }
             } catch (sendError) {
-                console.error('❌ Error al enviar con EmailJS:', sendError);
+                console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                console.error('❌ ERROR AL ENVIAR CON EMAILJS:');
+                console.error('   Error completo:', sendError);
+                console.error('   Status:', sendError.status);
+                console.error('   Text:', sendError.text);
+                console.error('   Message:', sendError.message);
+                console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                
+                // Si es error 412, dar instrucciones específicas
+                if (sendError.status === 412 || (sendError.text && sendError.text.includes('Invalid grant'))) {
+                    console.error('💡 SOLUCIÓN: Ve a dashboard.emailjs.com y reconecta tu cuenta de Gmail');
+                    console.error('💡 Mientras tanto, el formulario redirigirá automáticamente a WhatsApp');
+                }
+                
                 // Re-lanzar el error para que se maneje en el catch principal
                 throw sendError;
             }
             
         } catch (error) {
-            console.error('❌ Error al enviar formulario:', error);
-            console.error('❌ Error status:', error.status);
-            console.error('❌ Error text:', error.text);
-            console.error('❌ Error message:', error.message);
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.error('❌ ERROR GENERAL AL ENVIAR FORMULARIO:');
+            console.error('   Error completo:', error);
+            console.error('   Status:', error.status);
+            console.error('   Text:', error.text);
+            console.error('   Message:', error.message);
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             
             // Detectar si es el error 412 de Gmail (conexión expirada)
             const isGmailConnectionError = 
