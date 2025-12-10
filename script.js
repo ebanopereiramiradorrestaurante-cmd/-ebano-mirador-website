@@ -1,6 +1,6 @@
 // ============================================
 // MAIN INITIALIZATION - Todo el código dentro de DOMContentLoaded
-// VERSIÓN: 1765392250 - FORZAR RECARGA
+// VERSIÓN: fix-412-error-2025 - Mejora manejo error Gmail
 // ============================================
 
 (function() {
@@ -21,8 +21,8 @@
     }
     
     function init() {
-        console.log('🚀 Inicializando aplicación - VERSIÓN 1765392250');
-        console.log('🔄 Esta es una versión NUEVA - caché limpiado');
+        console.log('🚀 Inicializando aplicación - VERSIÓN fix-412-error-2025');
+        console.log('🔄 Mejoras: Detección mejorada de error 412 Gmail + Auto-redirección a WhatsApp');
         
         // Inicializar todas las funcionalidades
         initNavbar();
@@ -576,37 +576,39 @@
             
         } catch (error) {
             console.error('❌ Error al enviar formulario:', error);
+            console.error('❌ Error status:', error.status);
+            console.error('❌ Error text:', error.text);
+            console.error('❌ Error message:', error.message);
+            
+            // Detectar si es el error 412 de Gmail (conexión expirada)
+            const isGmailConnectionError = 
+                error.status === 412 || 
+                (error.text && (error.text.includes('Invalid grant') || error.text.includes('Gmail_API'))) ||
+                (error.message && (error.message.includes('Invalid grant') || error.message.includes('Gmail_API')));
             
             // Show error message
-            let errorMessage = 'Hubo un error al enviar tu solicitud. ';
+            let errorMessage = '';
+            let shouldAutoRedirect = false;
             
             // Mensajes de error específicos
-            if (error.status === 412) {
+            if (isGmailConnectionError) {
+                errorMessage = '⚠️ La conexión con Gmail ha expirado. El administrador debe reconectar la cuenta de Gmail en EmailJS. ';
+                shouldAutoRedirect = true; // Auto-redirigir a WhatsApp para este error
+            } else if (error.status === 412) {
                 errorMessage = '⚠️ La conexión con el servicio de email expiró. ';
-            } else if (error.text && error.text.includes('Invalid grant')) {
-                errorMessage = '⚠️ La conexión con Gmail expiró. Por favor, reconecta tu cuenta de Gmail en EmailJS. ';
+                shouldAutoRedirect = true;
             } else if (error.status) {
                 errorMessage = `⚠️ Error ${error.status}: No se pudo enviar el mensaje. `;
             } else if (error.message) {
-                errorMessage += `Error: ${error.message}. `;
+                errorMessage = `⚠️ Error: ${error.message}. `;
+            } else {
+                errorMessage = '⚠️ Hubo un error al enviar tu solicitud. ';
             }
             
-            errorMessage += 'Por favor, intenta nuevamente o contáctanos directamente por WhatsApp.';
+            errorMessage += 'Por favor, contáctanos directamente por WhatsApp para recibir atención inmediata.';
             
-            // Mostrar error y ofrecer WhatsApp como alternativa
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'form-error-message';
-            errorDiv.style.cssText = 'background: #fee; border: 2px solid #fcc; color: #c33; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 500;';
-            
-            const errorText = document.createElement('div');
-            errorText.textContent = errorMessage;
-            errorDiv.appendChild(errorText);
-            
-            // Botón para redirigir a WhatsApp
-            const whatsappBtn = document.createElement('button');
-            whatsappBtn.textContent = '📱 Contactar por WhatsApp';
-            whatsappBtn.style.cssText = 'margin-top: 15px; padding: 12px 24px; background: #25D366; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 16px;';
-            whatsappBtn.addEventListener('click', () => {
+            // Función auxiliar para obtener datos del formulario y redirigir a WhatsApp
+            const redirectToWhatsApp = () => {
                 const formData = {
                     nombre: document.getElementById('nombre')?.value || '',
                     email: document.getElementById('email')?.value || '',
@@ -636,7 +638,44 @@
                         window.closeFormModal();
                     }, 500);
                 }
+            };
+            
+            // Si es error de Gmail, auto-redirigir a WhatsApp después de mostrar el mensaje
+            if (shouldAutoRedirect) {
+                console.log('⚠️ Error de conexión Gmail detectado - Redirigiendo automáticamente a WhatsApp en 2 segundos...');
+                setTimeout(() => {
+                    redirectToWhatsApp();
+                }, 2000);
+            }
+            
+            // Mostrar error y ofrecer WhatsApp como alternativa
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'form-error-message';
+            errorDiv.style.cssText = 'background: #fee; border: 2px solid #fcc; color: #c33; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 500;';
+            
+            const errorText = document.createElement('div');
+            errorText.textContent = errorMessage;
+            if (shouldAutoRedirect) {
+                const autoRedirectText = document.createElement('div');
+                autoRedirectText.textContent = 'Te redirigiremos a WhatsApp automáticamente en unos segundos...';
+                autoRedirectText.style.cssText = 'margin-top: 10px; font-size: 0.9em; font-style: italic;';
+                errorText.appendChild(autoRedirectText);
+            }
+            errorDiv.appendChild(errorText);
+            
+            // Botón para redirigir a WhatsApp manualmente
+            const whatsappBtn = document.createElement('button');
+            whatsappBtn.textContent = shouldAutoRedirect ? '📱 Ir a WhatsApp Ahora' : '📱 Contactar por WhatsApp';
+            whatsappBtn.style.cssText = 'margin-top: 15px; padding: 12px 24px; background: #25D366; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 16px; transition: all 0.3s ease;';
+            whatsappBtn.addEventListener('mouseenter', () => {
+                whatsappBtn.style.background = '#20BA5A';
+                whatsappBtn.style.transform = 'scale(1.05)';
             });
+            whatsappBtn.addEventListener('mouseleave', () => {
+                whatsappBtn.style.background = '#25D366';
+                whatsappBtn.style.transform = 'scale(1)';
+            });
+            whatsappBtn.addEventListener('click', redirectToWhatsApp);
             errorDiv.appendChild(whatsappBtn);
             
             const form = document.getElementById('eventForm');
