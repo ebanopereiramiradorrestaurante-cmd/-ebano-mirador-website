@@ -504,21 +504,26 @@
             if (typeof emailjs === 'undefined' || !window.emailjsReady || window.emailjsFailed) {
                 console.warn('⚠️ EmailJS no disponible - Redirigiendo a WhatsApp');
                 const whatsappMessage = encodeURIComponent(
-                    `Hola Ébano Mirador, quiero información sobre:\n\n` +
-                    `Tipo de Evento: ${formData.tipoEvento}\n` +
-                    `Personas: ${formData.personas}\n` +
-                    `Fecha Tentativa: ${formData.fecha}\n` +
-                    `Nombre: ${formData.nombre}\n` +
-                    `Email: ${formData.email}\n` +
-                    `Teléfono: ${formData.telefono}\n` +
-                    (formData.notas ? `Notas: ${formData.notas}` : '')
+                    `Hola Ébano Mirador 👋\n\n` +
+                    `Quiero información sobre mi evento:\n\n` +
+                    `*Tipo de Evento:* ${formData.tipoEvento}\n` +
+                    `*Número de Personas:* ${formData.personas}\n` +
+                    `*Fecha Tentativa:* ${formData.fecha}\n` +
+                    `*Nombre:* ${formData.nombre}\n` +
+                    `*Email:* ${formData.email}\n` +
+                    `*Teléfono:* ${formData.telefono}\n` +
+                    (formData.notas ? `*Notas:* ${formData.notas}` : '')
                 );
                 window.open(`https://wa.me/573104827580?text=${whatsappMessage}`, '_blank');
                 
-                // Cerrar modal y mostrar mensaje
+                // Cerrar modal
                 if (window.closeFormModal) window.closeFormModal();
-                alert('El formulario no está disponible. Te hemos redirigido a WhatsApp para que puedas contactarnos directamente.');
                 return;
+            }
+            
+            // Verificar que EmailJS tiene el método send
+            if (typeof emailjs.send !== 'function') {
+                throw new Error('EmailJS no está completamente inicializado');
             }
             
             // Preparar parámetros para EmailJS
@@ -536,19 +541,38 @@
             console.log('📤 Enviando email con EmailJS...');
             
             // Enviar con EmailJS
-            const response = await emailjs.send(
-                'service_ldilgbs',
-                'template_gp3o3tk',
-                templateParams
-            );
-            
-            console.log('✅ Email enviado exitosamente:', response);
-            
-            // Success
-            if (window.closeFormModal) window.closeFormModal();
-            setTimeout(() => {
-                if (window.openSuccessModal) window.openSuccessModal();
-            }, 300);
+            let response;
+            try {
+                response = await emailjs.send(
+                    'service_ldilgbs',
+                    'template_gp3o3tk',
+                    templateParams
+                );
+                
+                console.log('✅ Email enviado exitosamente:', response);
+                console.log('✅ Status:', response.status);
+                console.log('✅ Text:', response.text);
+                
+                // Verificar que el envío fue exitoso
+                if (response.status === 200) {
+                    // Success - Cerrar modal del formulario
+                    if (window.closeFormModal) window.closeFormModal();
+                    
+                    // Mostrar modal de éxito después de un breve delay
+                    setTimeout(() => {
+                        if (window.openSuccessModal) {
+                            window.openSuccessModal();
+                            console.log('✅ Modal de éxito mostrado');
+                        }
+                    }, 300);
+                } else {
+                    throw new Error(`EmailJS respondió con status ${response.status}`);
+                }
+            } catch (sendError) {
+                console.error('❌ Error al enviar con EmailJS:', sendError);
+                // Re-lanzar el error para que se maneje en el catch principal
+                throw sendError;
+            }
             
         } catch (error) {
             console.error('❌ Error al enviar formulario:', error);
@@ -556,17 +580,18 @@
             // Show error message
             let errorMessage = 'Hubo un error al enviar tu solicitud. ';
             
-            // Si EmailJS falla, ofrecer redirigir a WhatsApp
-            if (error.text && error.text.includes('Invalid grant')) {
-                errorMessage = '⚠️ La conexión con Gmail expiró. ';
+            // Mensajes de error específicos
+            if (error.status === 412) {
+                errorMessage = '⚠️ La conexión con el servicio de email expiró. ';
+            } else if (error.text && error.text.includes('Invalid grant')) {
+                errorMessage = '⚠️ La conexión con Gmail expiró. Por favor, reconecta tu cuenta de Gmail en EmailJS. ';
+            } else if (error.status) {
+                errorMessage = `⚠️ Error ${error.status}: No se pudo enviar el mensaje. `;
             } else if (error.message) {
                 errorMessage += `Error: ${error.message}. `;
             }
             
-            // Agregar opción de WhatsApp como alternativa
-            errorMessage += '\n\n¿Deseas contactarnos directamente por WhatsApp?';
-            
-            errorMessage += 'Por favor, intenta nuevamente o contáctanos directamente por WhatsApp al 310 482 7580.';
+            errorMessage += 'Por favor, intenta nuevamente o contáctanos directamente por WhatsApp.';
             
             // Mostrar error y ofrecer WhatsApp como alternativa
             const errorDiv = document.createElement('div');

@@ -1465,7 +1465,8 @@ body.urgency-visible {
 
 .form-group input,
 .form-group select,
-.form-group textarea {
+.form-group textarea,
+.form-input-date {
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -1490,6 +1491,38 @@ body.urgency-visible {
 .form-group select.error,
 .form-group textarea.error {
     border-color: #e74c3c;
+}
+
+/* Estilo específico para campo de fecha - Asegurar que sea visible y funcional */
+.form-input-date,
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: inherit;
+    background: var(--color-white);
+    color: var(--color-text);
+    cursor: pointer;
+    min-height: 48px;
+}
+
+.form-input-date:focus,
+.form-group input[type="date"]:focus {
+    outline: none;
+    border-color: var(--color-gold-primary);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.form-input-date::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0.7;
+}
+
+.form-input-date::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
 }
 
 .error-message {
