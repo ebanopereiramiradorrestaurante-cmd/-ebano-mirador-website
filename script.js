@@ -166,21 +166,37 @@ function validatePhone(phone) {
 }
 
 function showError(input, message) {
-    const formGroup = input.closest('.form-group');
-    const errorMessage = formGroup.querySelector('.error-message');
+    if (!input) return;
     
-    input.classList.add('error');
-    errorMessage.textContent = message;
-    errorMessage.classList.add('show');
+    const formGroup = input.closest('.form-group');
+    if (!formGroup) return;
+    
+    const errorMessage = formGroup.querySelector('.error-message');
+    if (errorMessage) {
+        errorMessage.textContent = message;
+        errorMessage.classList.add('show');
+    }
+    
+    if (input.classList) {
+        input.classList.add('error');
+    }
 }
 
 function clearError(input) {
-    const formGroup = input.closest('.form-group');
-    const errorMessage = formGroup.querySelector('.error-message');
+    if (!input) return;
     
-    input.classList.remove('error');
-    errorMessage.classList.remove('show');
-    errorMessage.textContent = '';
+    const formGroup = input.closest('.form-group');
+    if (!formGroup) return;
+    
+    const errorMessage = formGroup.querySelector('.error-message');
+    if (errorMessage) {
+        errorMessage.classList.remove('show');
+        errorMessage.textContent = '';
+    }
+    
+    if (input.classList) {
+        input.classList.remove('error');
+    }
 }
 
 function clearErrors() {
@@ -623,25 +639,50 @@ function initUrgencyBanner() {
     const banner = document.getElementById('urgencyBanner');
     const closeBtn = document.getElementById('urgencyClose');
     
-    if (!banner) return;
+    if (!banner) {
+        console.warn('⚠️ Banner no encontrado');
+        return;
+    }
     
     // Show banner after 2 seconds
     setTimeout(() => {
         if (!localStorage.getItem('urgencyBannerClosed')) {
             banner.classList.add('show');
             document.body.classList.add('urgency-visible');
+            console.log('✅ Banner mostrado');
         }
     }, 2000);
     
-    // Close banner
+    // Close banner - Multiple event listeners for reliability
     if (closeBtn) {
-        closeBtn.addEventListener('click', (e) => {
+        // Remove any existing listeners by cloning
+        const newCloseBtn = closeBtn.cloneNode(true);
+        closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+        
+        // Add click event
+        newCloseBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            banner.classList.remove('show');
-            document.body.classList.remove('urgency-visible');
-            localStorage.setItem('urgencyBannerClosed', 'true');
+            e.stopImmediatePropagation();
+            
+            console.log('🔴 Botón de cerrar clickeado');
+            
+            const bannerEl = document.getElementById('urgencyBanner');
+            if (bannerEl) {
+                bannerEl.classList.remove('show');
+                document.body.classList.remove('urgency-visible');
+                localStorage.setItem('urgencyBannerClosed', 'true');
+                console.log('✅ Banner cerrado');
+            }
         });
+        
+        // Also add mousedown for better responsiveness
+        newCloseBtn.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    } else {
+        console.error('❌ Botón de cerrar no encontrado');
     }
     
     // Also close on banner click (outside the content)
@@ -666,6 +707,16 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             heroContent.style.opacity = '1';
         }, 100);
+    }
+    
+    // Set minimum date for fecha input (today)
+    const fechaInput = document.getElementById('fecha');
+    if (fechaInput) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        fechaInput.min = `${year}-${month}-${day}`;
     }
     
     // Initialize new features
