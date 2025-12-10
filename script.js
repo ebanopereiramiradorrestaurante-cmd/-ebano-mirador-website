@@ -263,29 +263,57 @@ eventForm.addEventListener('submit', async (e) => {
     };
     
     try {
-        // Initialize EmailJS (will be initialized on page load)
-        if (typeof emailjs === 'undefined') {
-            throw new Error('EmailJS no está cargado');
+        console.log('📋 Iniciando envío del formulario...');
+        console.log('📋 Datos del formulario:', formData);
+        
+        // Wait for EmailJS to be ready (max 5 seconds)
+        let attempts = 0;
+        const maxAttempts = 50;
+        
+        while ((typeof emailjs === 'undefined' || !window.emailjsReady) && attempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
         }
+        
+        // Verify EmailJS is loaded
+        if (typeof emailjs === 'undefined') {
+            console.error('❌ EmailJS no está definido después de esperar');
+            throw new Error('EmailJS no está cargado. Por favor, recarga la página y verifica tu conexión a internet.');
+        }
+        
+        // Verify EmailJS has send method
+        if (typeof emailjs.send !== 'function') {
+            console.error('❌ EmailJS.send no es una función');
+            throw new Error('EmailJS no está inicializado correctamente. Por favor, recarga la página.');
+        }
+        
+        console.log('✅ EmailJS verificado correctamente');
         
         // Prepare email template parameters
         const templateParams = {
-            from_name: formData.nombre,
-            from_email: formData.email,
-            phone: formData.telefono,
+            from_name: formData.nombre.trim(),
+            from_email: formData.email.trim(),
+            phone: formData.telefono.trim(),
             event_type: formData.tipoEvento,
             people: formData.personas,
             date: formData.fecha,
-            message: formData.notas || 'Sin notas adicionales',
+            message: (formData.notas || '').trim() || 'Sin notas adicionales',
             to_email: 'ebanopereiramiradorrestaurante@gmail.com'
         };
         
+        console.log('📧 Parámetros del email:', templateParams);
+        console.log('📤 Enviando email con EmailJS...');
+        
         // Send email using EmailJS
-        await emailjs.send(
+        const response = await emailjs.send(
             'service_ldilgbs',      // Service ID - Configurado
             'template_gp3o3tk',     // Template ID - Configurado
             templateParams
         );
+        
+        console.log('✅ Email enviado exitosamente:', response);
+        console.log('✅ Status:', response.status);
+        console.log('✅ Text:', response.text);
         
         // Success
         closeFormModal();
@@ -607,12 +635,23 @@ function initUrgencyBanner() {
     
     // Close banner
     if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             banner.classList.remove('show');
             document.body.classList.remove('urgency-visible');
             localStorage.setItem('urgencyBannerClosed', 'true');
         });
     }
+    
+    // Also close on banner click (outside the content)
+    banner.addEventListener('click', (e) => {
+        if (e.target === banner) {
+            banner.classList.remove('show');
+            document.body.classList.remove('urgency-visible');
+            localStorage.setItem('urgencyBannerClosed', 'true');
+        }
+    });
 }
 
 // ============================================

@@ -841,15 +841,20 @@ body.urgency-visible {
     background: transparent;
     border: none;
     color: var(--color-black);
-    font-size: 24px;
+    font-size: 28px;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     transition: var(--transition);
+    z-index: 1000;
+    pointer-events: auto;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
 }
 
 .urgency-close:hover {

@@ -718,7 +718,25 @@
     <script>
         // Initialize EmailJS with Public Key
         (function(){
-            emailjs.init("2HXw__rvQyUIqX4FF");
+            try {
+                if (typeof emailjs !== 'undefined') {
+                    emailjs.init("2HXw__rvQyUIqX4FF");
+                    window.emailjsReady = true;
+                    console.log('✅ EmailJS inicializado correctamente');
+                    console.log('🔑 Public Key: 2HXw__rvQyUIqX4FF');
+                } else {
+                    console.warn('⚠️ EmailJS aún no está cargado, esperando...');
+                    window.addEventListener('load', function() {
+                        if (typeof emailjs !== 'undefined') {
+                            emailjs.init("2HXw__rvQyUIqX4FF");
+                            window.emailjsReady = true;
+                            console.log('✅ EmailJS inicializado después de carga');
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('❌ Error al inicializar EmailJS:', error);
+            }
         })();
     </script>
     <script src="script.js"></script>
