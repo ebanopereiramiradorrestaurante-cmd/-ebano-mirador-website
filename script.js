@@ -200,9 +200,14 @@ function clearError(input) {
 }
 
 function clearErrors() {
-    document.querySelectorAll('.error').forEach(input => {
-        clearError(input);
-    });
+    const errorInputs = document.querySelectorAll('.error');
+    if (errorInputs && errorInputs.length > 0) {
+        errorInputs.forEach(input => {
+            if (input && input.closest('.form-group')) {
+                clearError(input);
+            }
+        });
+    }
 }
 
 // Real-time validation
@@ -240,9 +245,13 @@ function validateField(input) {
         return false;
     }
     
-    // Only clear error if input has a form-group parent
-    if (input.closest('.form-group')) {
-        clearError(input);
+    // Only clear error if input has a form-group parent and error exists
+    try {
+        if (input && input.closest('.form-group')) {
+            clearError(input);
+        }
+    } catch (err) {
+        console.warn('Error al limpiar error del campo:', err);
     }
     
     return true;
