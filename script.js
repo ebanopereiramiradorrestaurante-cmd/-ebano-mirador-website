@@ -221,7 +221,9 @@ formInputs.forEach(input => {
 });
 
 function validateField(input) {
-    const value = input.value.trim();
+    if (!input) return true;
+    
+    const value = input.value ? input.value.trim() : '';
     
     if (input.hasAttribute('required') && !value) {
         showError(input, 'Este campo es obligatorio');
@@ -238,7 +240,11 @@ function validateField(input) {
         return false;
     }
     
-    clearError(input);
+    // Only clear error if input has a form-group parent
+    if (input.closest('.form-group')) {
+        clearError(input);
+    }
+    
     return true;
 }
 
@@ -709,14 +715,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
     }
     
-    // Set minimum date for fecha input (today)
+    // Set minimum date for fecha input (today) - prevent past dates
     const fechaInput = document.getElementById('fecha');
     if (fechaInput) {
         const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to start of day
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
-        fechaInput.min = `${year}-${month}-${day}`;
+        const minDate = `${year}-${month}-${day}`;
+        fechaInput.min = minDate;
+        fechaInput.setAttribute('min', minDate);
+        console.log('✅ Fecha mínima establecida:', minDate);
     }
     
     // Initialize new features
